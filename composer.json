@@ -1,0 +1,26 @@
+{
+    "name": "trpl2alex14/external-api",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "trpl2alex14"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.0",
+        "guzzlehttp/guzzle": "^7.0"
+    },
+    "require-dev": {
+        "phpunit/php-code-coverage": "9.2.x-dev"
+    },
+    "autoload": {
+        "psr-4": {
+            "ExternalApi\\": "src/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit --testdox"
+    }
+}
