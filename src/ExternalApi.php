@@ -4,7 +4,7 @@ namespace ExternalApi;
 
 use ExternalApi\Common\Gateway;
 use ExternalApi\Common\GatewayFactory;
-use \ExternalApi\Contracts\GatewayInterface;
+use ExternalApi\Contracts\GatewayInterface;
 
 
 /**
@@ -12,7 +12,7 @@ use \ExternalApi\Contracts\GatewayInterface;
  */
 class ExternalApi
 {
-    private static ?GatewayFactory $factory;
+    private static ?GatewayFactory $factory = null;
 
 
     public static function getFactory(): GatewayFactory

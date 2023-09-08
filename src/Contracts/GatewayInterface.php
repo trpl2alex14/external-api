@@ -2,7 +2,7 @@
 
 namespace ExternalApi\Contracts;
 
-use Psr\Http\Message\ResponseInterface;
+use ExternalApi\Contracts\ResponseInterface;
 
 
 interface GatewayInterface
@@ -13,7 +13,7 @@ interface GatewayInterface
      * @param string $entity
      * @return RequestBuilderInterface
      */
-    public function requestBuilder(string $entity): RequestBuilderInterface;
+    public function createRequestBuilder(string $entity): RequestBuilderInterface;
 
     public function call(ApiRequestInterface $request): ResponseInterface;
 

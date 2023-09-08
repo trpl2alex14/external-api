@@ -41,10 +41,12 @@ abstract class Builder implements RequestBuilderInterface
 
         $this->parameters = [];
 
-        return [
+        return new Request([
             'method' => $this->method,
-            'params' => $data
-        ];
+            'data' => $data,
+//            'query' => [],
+//            'headers' => []
+        ]);
     }
 
 

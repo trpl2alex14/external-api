@@ -38,6 +38,6 @@ class Helper
             $shortName .= '\\';
         }
 
-        return '\\ExternalApi\\'.$shortName.'Gateway';
+        return 'ExternalApi\\'.ucfirst($shortName).'Gateway';
     }
 }

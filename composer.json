@@ -13,11 +13,13 @@
         "guzzlehttp/guzzle": "^7.0"
     },
     "require-dev": {
-        "phpunit/php-code-coverage": "9.2.x-dev"
+        "phpunit/php-code-coverage": "9.2.x-dev",
+        "phpunit/phpunit": "9.6.x-dev"
     },
     "autoload": {
         "psr-4": {
-            "ExternalApi\\": "src/"
+            "ExternalApi\\": "src/",
+            "ExternalApi\\Tests\\": "tests"
         }
     },
     "scripts": {

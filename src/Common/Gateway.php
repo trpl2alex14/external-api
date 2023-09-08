@@ -10,7 +10,7 @@ use ExternalApi\Exceptions\CouldNotCallApi;
 use ExternalApi\Exceptions\GatewayException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use Psr\Http\Message\ResponseInterface;
+use ExternalApi\Contracts\ResponseInterface;
 use RuntimeException;
 
 
@@ -29,8 +29,10 @@ abstract class Gateway implements GatewayInterface
     private string $endpoint;
 
 
-    public function __construct(protected Client $client)
+    public function __construct(protected ?Client $client = null)
     {
+        $this->client = $this->client ?: new Client();
+
         $this->setHeader('User-Agent', 'External webhook client');
     }
 
@@ -101,7 +103,7 @@ abstract class Gateway implements GatewayInterface
     }
 
 
-    public function requestBuilder(string $entity): RequestBuilderInterface
+    public function createRequestBuilder(string $entity): RequestBuilderInterface
     {
         $class = Helper::getRequestClassName($entity, static::class);
 
@@ -144,9 +146,7 @@ abstract class Gateway implements GatewayInterface
             throw CouldNotCallApi::serviceRespondedWithAnError($response);
         }
 
-        //todo response
-
-        return $response;
+        return $this->makeResponse($request, $response);
     }
 
 
@@ -155,10 +155,13 @@ abstract class Gateway implements GatewayInterface
         $query = array_merge($this->queryValues, $request->getQueryValues() ?: []);
 
         $options = [
-            'query' => empty($query) ? null : $query,
             'headers' => array_merge($this->headers, $request->getHeaders() ?: []),
             'verify' => $this->verify,
         ];
+
+        if(!empty($query)){
+            $options['query'] = $query;
+        }
 
         $body = $request->getData();
         if (!empty($body)) {
@@ -166,5 +169,19 @@ abstract class Gateway implements GatewayInterface
         }
 
         return $options;
+    }
+
+
+    private function makeResponse(ApiRequestInterface $request, mixed $response): Response
+    {
+        if (method_exists($request, 'getResponseClassName')) {
+            $class = $request->getResponseClassName();
+
+            $class = class_exists($class) ? $class : null;
+        }
+
+        $class = $class ?? Response::class;
+
+        return new $class($response);
     }
 }

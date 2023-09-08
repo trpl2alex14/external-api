@@ -16,7 +16,7 @@ class CouldNotCallApi extends Exception
     {
         $this->response = $response;
         $this->message = $message;
-        $this->code = $code ?? $response->getStatusCode();
+        $this->code = $code ?? $response?->getStatusCode() ?? null;
 
         parent::__construct($message, $code);
     }
