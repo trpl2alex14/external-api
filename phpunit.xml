@@ -15,7 +15,7 @@
     </coverage>
     <testsuites>
         <testsuite name="Feature">
-            <directory>./tests</directory>
+            <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>

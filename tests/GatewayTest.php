@@ -9,14 +9,15 @@ use ExternalApi\Common\Response;
 use ExternalApi\Contracts\RequestBuilderInterface;
 use ExternalApi\Exceptions\GatewayException;
 use ExternalApi\ExternalApi;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Response as BaseResponse;
+use ExternalApi\Tests\Traits\AssertGateway;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\ResponseInterface;
 
 
 class GatewayTest extends TestCase
 {
+    use AssertGateway;
+
+
     public function test_get_gateway_class_name_by_name()
     {
         $class = Helper::getGatewayClassName('bitrix24');
@@ -101,19 +102,8 @@ class GatewayTest extends TestCase
     {
         $url = 'https://test.loc';
 
-        $response = $this->createStub(BaseResponse::class);
-        $response->method('getStatusCode')
-            ->willReturn(200);
+        $gateway = $this->getAssertGatewayStub(Gateway::class, $expect['url'], $expect['options'], $expect['type']);
 
-        $client = $this->createStub(Client::class);
-        $client->method('request')
-            ->with($this->stringContains($expect['type']),
-                $this->stringContains($expect['url']),
-                $this->equalTo($expect['options'])
-            )
-            ->willReturn($response);
-
-        $gateway = new Gateway($client);
         $gateway->setWebhookEndpoint($url);
 
         if (isset($parameters['agent'])) {
@@ -141,7 +131,7 @@ class GatewayTest extends TestCase
             [
                 [
                     'method' => 'update',
-                    'data' => ['test']
+                    'data' => ['test'=>true]
                 ],
                 [
                     'agent' => 'Test Api'
@@ -153,7 +143,7 @@ class GatewayTest extends TestCase
                         'headers' => [
                             'User-Agent' => 'Test Api',
                         ],
-                        'body' => json_encode(['test']),
+                        'body' => http_build_query(['test'=>true]),
                         'verify' => false
                     ],
                 ]

@@ -19,7 +19,7 @@
     "autoload": {
         "psr-4": {
             "ExternalApi\\": "src/",
-            "ExternalApi\\Tests\\": "tests"
+            "ExternalApi\\Tests\\": "tests/"
         }
     },
     "scripts": {
