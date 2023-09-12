@@ -7,15 +7,31 @@ use ExternalApi\Contracts\GatewayInterface;
 use ExternalApi\Contracts\RequestBuilderInterface;
 
 
-abstract class Builder implements RequestBuilderInterface
+class Builder implements RequestBuilderInterface
 {
+    protected ?GatewayInterface $gateway;
+
     protected string $method;
 
-    protected array $parameters = [];
+    protected ?array $parameters = [];
+
+    protected ?array $query = null;
+
+    protected ?array $headers = null;
+
+    protected ?string $response = null;
 
 
-    public function __construct(protected GatewayInterface $gateway)
+    public function __construct()
     {
+    }
+
+
+    public function setGateway(GatewayInterface $gateway): self
+    {
+        $this->gateway = $gateway;
+
+        return $this;
     }
 
 
@@ -27,9 +43,47 @@ abstract class Builder implements RequestBuilderInterface
     }
 
 
-    public function setParameters(array $parameters): self
+    public function getMethod(): string
     {
-        $this->parameters = array_merge($this->parameters, $parameters);
+        return $this->method;
+    }
+
+
+    public function setParameters(?array $parameters): self
+    {
+        $this->parameters = is_null($parameters) ? [] : array_merge($this->parameters, $parameters);
+
+        return $this;
+    }
+
+
+    public function setQuery(?array $query): self
+    {
+        $this->query = $query;
+
+        return $this;
+    }
+
+
+    public function setHeaders(?array $headers): self
+    {
+        $this->headers = $headers;
+
+        return $this;
+    }
+
+
+    public function setFields(array $fields): self
+    {
+        $this->parameters['fields'] = $fields;
+
+        return $this;
+    }
+
+
+    public function setId(int $id): self
+    {
+        $this->parameters['id'] = $id;
 
         return $this;
     }
@@ -41,12 +95,15 @@ abstract class Builder implements RequestBuilderInterface
 
         $this->parameters = [];
 
-        return new Request([
-            'method' => $this->method,
-            'data' => $data,
-//            'query' => [],
-//            'headers' => []
-        ]);
+        return new Request(
+            [
+                'method' => $this->method,
+                'data' => $data,
+                'query' => $this->query,
+                'headers' => $this->headers
+            ],
+            $this->response
+        );
     }
 
 

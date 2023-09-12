@@ -12,12 +12,13 @@ class Request implements ApiRequestInterface
 
     private array $parameters = [];
 
-    public function __construct(array $parameters = null)
+    public function __construct(array $parameters = null, string $response = null)
     {
         $this->parameters['method'] = $parameters['method'] ?? null;
         $this->parameters['query'] = $parameters['query'] ?? null;
         $this->parameters['headers'] = $parameters['headers'] ?? null;
         $this->parameters['data'] = $parameters['data'] ?? null;
+        $this->response = $response ?: $this->response;
     }
 
 
