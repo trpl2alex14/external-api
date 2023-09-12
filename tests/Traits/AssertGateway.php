@@ -29,6 +29,6 @@ trait AssertGateway
             )
             ->willReturn($response);
 
-        return new $gateway($client);
+        return (new $gateway($client))->setThrottle(false);
     }
 }
