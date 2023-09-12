@@ -4,6 +4,7 @@
          colors="true"
          verbose="true"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+         defaultTestSuite="feature"
 >
     <coverage>
         <include>
@@ -14,8 +15,11 @@
         </report>
     </coverage>
     <testsuites>
-        <testsuite name="Feature">
-            <directory suffix="Test.php">./tests</directory>
+        <testsuite name="feature">
+            <directory suffix="Test.php">./tests/Features</directory>
+        </testsuite>
+        <testsuite name="integrations">
+            <directory suffix="Test.php">./tests/Integrations</directory>
         </testsuite>
     </testsuites>
 </phpunit>

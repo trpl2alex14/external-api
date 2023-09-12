@@ -24,3 +24,4 @@ composer.phar
 phpunit-skelgen.phar
 phpunit.phar
 /.phpunit.result.cache
+/tests/Integrations/config.php
