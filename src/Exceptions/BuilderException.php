@@ -23,4 +23,10 @@ class BuilderException extends  Exception
     {
         return new self("Command not set");
     }
+
+
+    public static function commandLimit(int $max): BuilderException
+    {
+        return new self("the command limit has been reached (max: $max)");
+    }
 }

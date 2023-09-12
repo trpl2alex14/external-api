@@ -8,6 +8,8 @@ use ExternalApi\Exceptions\BuilderException;
 
 class BatchRequestBuilder extends Builder
 {
+    public const MAX_COMMANDS = 50;
+
     protected string $method = 'batch';
 
     protected array $commands = [];
@@ -69,6 +71,10 @@ class BatchRequestBuilder extends Builder
     {
         if(empty($this->commands)){
             throw BuilderException::commandNotSet();
+        }
+
+        if(count($this->commands) > self::MAX_COMMANDS){
+            throw BuilderException:: commandLimit(self::MAX_COMMANDS);
         }
 
         return [
