@@ -49,6 +49,16 @@ class Builder implements RequestBuilderInterface
     }
 
 
+    public function setResponse(string $response): self
+    {
+        if (is_subclass_of($response, Response::class, true)) {
+            $this->response = $response;
+        }
+
+        return $this;
+    }
+
+
     public function setParameters(?array $parameters): self
     {
         $this->parameters = is_null($parameters) ? [] : array_merge($this->parameters, $parameters);
