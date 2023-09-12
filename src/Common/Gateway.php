@@ -28,6 +28,8 @@ abstract class Gateway implements GatewayInterface
 
     private string $endpoint;
 
+    protected string $bodyEncodeMethod = 'json_encode';
+
 
     public function __construct(protected ?Client $client = null)
     {
@@ -111,7 +113,7 @@ abstract class Gateway implements GatewayInterface
             throw new RuntimeException("Class request '$class' not found");
         }
 
-        return new $class($this);
+        return (new $class)->setGateway($this);
     }
 
     /**
@@ -165,7 +167,9 @@ abstract class Gateway implements GatewayInterface
 
         $body = $request->getData();
         if (!empty($body)) {
-            $options['body'] = json_encode($body);
+            $options['body'] = function_exists($this->bodyEncodeMethod)
+                ? call_user_func($this->bodyEncodeMethod,($body))
+                : json_encode($body);
         }
 
         return $options;

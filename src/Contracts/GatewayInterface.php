@@ -2,8 +2,6 @@
 
 namespace ExternalApi\Contracts;
 
-use ExternalApi\Contracts\ResponseInterface;
-
 
 interface GatewayInterface
 {
