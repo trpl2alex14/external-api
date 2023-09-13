@@ -29,4 +29,10 @@ class BuilderException extends  Exception
     {
         return new self("the command limit has been reached (max: $max)");
     }
+
+
+    public static function requiredParameters(string $key): BuilderException
+    {
+        return new self("not set required parameters $key");
+    }
 }
