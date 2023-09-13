@@ -117,14 +117,14 @@ abstract class Gateway implements GatewayInterface
     }
 
     /**
-     * @param ApiRequestInterface $request
-     *
-     * @return ResponseInterface
-     *
      * @throws GatewayException|CouldNotCallApi
      */
-    public function call(ApiRequestInterface $request): ResponseInterface
+    public function call(ApiRequestInterface|RequestBuilderInterface $request): ResponseInterface
     {
+        if($request instanceof RequestBuilderInterface){
+            $request = $request->build();
+        }
+
         $url = $this->getWebhookEndpoint();
 
         if($command = $request->getMethod()){

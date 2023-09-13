@@ -6,7 +6,7 @@ use ExternalApi\Common\Builder;
 use ExternalApi\Exceptions\BuilderException;
 
 
-class BatchRequestBuilder extends Builder
+class BatchBuilder extends Builder
 {
     public const MAX_COMMANDS = 50;
 
@@ -14,11 +14,11 @@ class BatchRequestBuilder extends Builder
 
     protected array $commands = [];
 
+    protected ?string $response = BatchResponse::class;
 
-    public function __construct()
+
+    protected function initialization()
     {
-        parent::__construct();
-
         $this->setHalt(false);
     }
 
@@ -67,7 +67,7 @@ class BatchRequestBuilder extends Builder
     /**
      * @throws BuilderException
      */
-    protected function getData(): array
+    public function getData(): array
     {
         if(empty($this->commands)){
             throw BuilderException::commandNotSet();

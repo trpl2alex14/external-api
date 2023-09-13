@@ -2,7 +2,7 @@
 
 namespace ExternalApi\Tests\Features;
 
-use ExternalApi\Bitrix24\BatchRequestBuilder;
+use ExternalApi\Bitrix24\BatchBuilder;
 use ExternalApi\Bitrix24\Gateway;
 use ExternalApi\Common\Builder;
 use ExternalApi\Common\Response;
@@ -20,7 +20,7 @@ class BatchBuilderBitrix24Test extends TestCase
     {
         $this->expectException(BuilderException::class);
 
-        $builder = new BatchRequestBuilder();
+        $builder = new BatchBuilder();
 
         $builder->build();
     }
@@ -30,7 +30,7 @@ class BatchBuilderBitrix24Test extends TestCase
     {
         $this->expectException(BuilderException::class);
 
-        $builder = new BatchRequestBuilder();
+        $builder = new BatchBuilder();
         $builder->setCommand((new Builder())->method('test.method'), 'new');
         $builder->takeInputFrom('unknown', 'new', 'id', 'id');
     }
@@ -40,7 +40,7 @@ class BatchBuilderBitrix24Test extends TestCase
     {
         $this->expectException(BuilderException::class);
 
-        $builder = new BatchRequestBuilder();
+        $builder = new BatchBuilder();
         $builder->setCommand((new Builder())->method('test.method'), 'first');
         $builder->takeInputFrom('first', 'unknown', 'id', 'id');
     }
@@ -64,7 +64,7 @@ class BatchBuilderBitrix24Test extends TestCase
         );
         $gateway->setWebhookEndpoint($url);
 
-        $builder = new BatchRequestBuilder();
+        $builder = new BatchBuilder();
         foreach ($requestData as $name => $command) {
             $buildCommand = (new Builder())->method($command['method']);
             if (isset($command['parameters'])) {

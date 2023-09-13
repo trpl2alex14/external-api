@@ -2,8 +2,8 @@
 
 namespace ExternalApi\Common;
 
-
 use ExternalApi\Contracts\GatewayInterface;
+
 
 class Helper
 {
@@ -16,7 +16,7 @@ class Helper
         }
 
         $namespace = substr($gateway, 0, strrpos($gateway, '\\'));
-        return $namespace.'\\'.ucfirst($shortName).'RequestBuilder';
+        return $namespace.'\\'.ucfirst($shortName).'Builder';
     }
 
 

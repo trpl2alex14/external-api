@@ -3,6 +3,7 @@
 namespace ExternalApi\Common;
 
 use ExternalApi\Contracts\ApiRequestInterface;
+use ExternalApi\Contracts\EntityFieldsInterface;
 use ExternalApi\Contracts\GatewayInterface;
 use ExternalApi\Contracts\RequestBuilderInterface;
 
@@ -13,6 +14,8 @@ class Builder implements RequestBuilderInterface
 
     protected string $method;
 
+    protected array $methods = [];
+
     protected ?array $parameters = [];
 
     protected ?array $query = null;
@@ -21,9 +24,30 @@ class Builder implements RequestBuilderInterface
 
     protected ?string $response = null;
 
+    protected string $entityFieldsClass = EntityFields::class;
+
+    private EntityFieldsInterface $entityFields;
+
 
     public function __construct()
     {
+        if(class_exists($this->entityFieldsClass)) {
+            $this->entityFields = new $this->entityFieldsClass();
+        }
+
+        $this->initialization();
+    }
+
+
+    protected function initialization()
+    {
+        //
+    }
+
+
+    public function getEntityFields(): EntityFieldsInterface
+    {
+        return $this->entityFields;
     }
 
 
@@ -37,7 +61,7 @@ class Builder implements RequestBuilderInterface
 
     public function method($name): self
     {
-        $this->method = $name;
+        $this->method = $this->methods[$name] ?? $name;
 
         return $this;
     }
@@ -67,6 +91,20 @@ class Builder implements RequestBuilderInterface
     }
 
 
+    public function setParameter(string $key, mixed $value): self
+    {
+        $this->parameters[$key] = $value;
+
+        return $this;
+    }
+
+
+    public function getParameter(string $key): mixed
+    {
+        return $this->parameters[$key] ?? null;
+    }
+
+
     public function setQuery(?array $query): self
     {
         $this->query = $query;
@@ -91,11 +129,23 @@ class Builder implements RequestBuilderInterface
     }
 
 
+    public function getFields(): ?array
+    {
+        return $this->parameters['fields'];
+    }
+
+
     public function setId(int $id): self
     {
         $this->parameters['id'] = $id;
 
         return $this;
+    }
+
+
+    public function getId(): ?int
+    {
+        return $this->parameters['id'];
     }
 
 
@@ -117,7 +167,7 @@ class Builder implements RequestBuilderInterface
     }
 
 
-    protected function getData(): array
+    public function getData(): array
     {
         return $this->parameters;
     }

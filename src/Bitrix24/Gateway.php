@@ -5,6 +5,7 @@ namespace ExternalApi\Bitrix24;
 use ExternalApi\Common\Gateway as BaseGateway;
 use ExternalApi\Common\Response as BaseResponse;
 use ExternalApi\Contracts\ApiRequestInterface;
+use ExternalApi\Contracts\RequestBuilderInterface;
 
 
 class Gateway extends BaseGateway
@@ -30,7 +31,7 @@ class Gateway extends BaseGateway
     }
 
 
-    public function call(ApiRequestInterface $request): Response
+    public function call(ApiRequestInterface|RequestBuilderInterface $request): Response
     {
         $time_start = microtime(true);
 
