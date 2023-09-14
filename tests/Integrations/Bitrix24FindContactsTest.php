@@ -5,6 +5,7 @@ namespace ExternalApi\Tests\Integrations;
 use ExternalApi\Bitrix24\BatchBuilder;
 use ExternalApi\Bitrix24\BatchResponse;
 use ExternalApi\Bitrix24\ContactBuilder;
+use ExternalApi\Bitrix24\ContactFoundResponse;
 use ExternalApi\Bitrix24\Gateway;
 use ExternalApi\Contracts\FilterInterface;
 use ExternalApi\ExternalApi;
@@ -32,6 +33,13 @@ class Bitrix24FindContactsTest extends TestCase
 
     public function test_bitrix24_find_contacts_by_phone_or_email()
     {
+        $expectIDs = [
+            'find.email' => [19604, 19606],
+            'find.phone' => [19604],
+            'list.email' => [19604],
+            'list.phone' => [19604],
+        ];
+
         $contact = [
             'phone' => '+7 900 123-12-12',
             'email' => 'test@test.ru',
@@ -51,7 +59,7 @@ class Bitrix24FindContactsTest extends TestCase
             ->select('first_name', 'last_name')
             ->where(function (FilterInterface $filter) use ($contact) {
                 return $filter
-                    ->contains('name', $contact['first_name'])
+                    ->contains('first_name', $contact['first_name'])
                     ->equal('last_name', $contact['last_name']);
             });
 
@@ -63,7 +71,6 @@ class Bitrix24FindContactsTest extends TestCase
             ->setCommand($contactListBuilder, 'list.email')
             ->takeInputFrom('find.email', null, 'filter[ID]', 'CONTACT');
 
-
         $response = $this->gateway->call($batchBuilder);
 
         $this->assertInstanceOf(BatchResponse::class, $response);
@@ -71,6 +78,37 @@ class Bitrix24FindContactsTest extends TestCase
         $this->assertArrayHasKey('list.email', $response->getResult());
         $this->assertArrayHasKey('find.phone', $response->getResult());
         $this->assertArrayHasKey('find.email', $response->getResult());
+
+        $ids = $response->getResult()['find.email']['CONTACT'];
+        $this->assertEquals($expectIDs['find.email'], $ids);
+        $ids = $response->getResult()['find.phone']['CONTACT'];
+        $this->assertEquals($expectIDs['find.phone'], $ids);
+
+        $ids = array_map(fn($item)=>$item['ID'], $response->getResult()['list.phone']);
+        $this->assertEquals($expectIDs['list.phone'], $ids);
+        $ids = array_map(fn($item)=>$item['ID'], $response->getResult()['list.email']);
+        $this->assertEquals($expectIDs['list.email'], $ids);
     }
 
+
+    public function test_bitrix24_find_contacts_by_contact()
+    {
+        $contact = [
+            'id' => 19604,
+            'phone' => ['+7 900 123-12-12', '+7 900 123-12-10'],
+            'email' => 'test@test.ru',
+            'first_name' => 'алексей',
+            'last_name' => 'тест'
+        ];
+
+        $builder = (new ContactBuilder())
+            ->method('findBy')
+            ->byContact($contact);
+
+        $response = $this->gateway->call($builder);
+
+        $this->assertInstanceOf(ContactFoundResponse::class, $response);
+        $this->assertCount(1, $response->getResult());
+        $this->assertEquals($contact['id'], $response->getResult()[0]['ID']);
+    }
 }
