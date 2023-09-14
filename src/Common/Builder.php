@@ -153,8 +153,6 @@ class Builder implements RequestBuilderInterface
     {
         $data = $this->getData();
 
-        $this->parameters = [];
-
         return new Request(
             [
                 'method' => $this->method,

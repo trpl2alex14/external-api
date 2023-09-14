@@ -18,8 +18,8 @@ class Filter implements FilterInterface
 
     public function contains(string $key, $value): FilterInterface
     {
-        $code = $this->entityFields->getCode($key);
-        $this->filters['%'.$code] = $value;
+        $code = '%'.$this->entityFields->getCode($key);
+        $this->filters[$code] = $value;
 
         return $this;
     }
