@@ -6,11 +6,11 @@ use Exception;
 use ExternalApi\Contracts\ApiRequestInterface;
 use ExternalApi\Contracts\GatewayInterface;
 use ExternalApi\Contracts\RequestBuilderInterface;
+use ExternalApi\Contracts\ResponseInterface;
 use ExternalApi\Exceptions\CouldNotCallApi;
 use ExternalApi\Exceptions\GatewayException;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use ExternalApi\Contracts\ResponseInterface;
 use RuntimeException;
 
 
@@ -51,7 +51,7 @@ abstract class Gateway implements GatewayInterface
      */
     public function getWebhookEndpoint(): string
     {
-        if(empty($this->endpoint)){
+        if (empty($this->endpoint)) {
             throw GatewayException::notSetEndPoint();
         }
 
@@ -95,9 +95,9 @@ abstract class Gateway implements GatewayInterface
      */
     public function setMethod(string $method): self
     {
-        if(in_array($method, self::$methods)) {
+        if (in_array($method, self::$methods)) {
             $this->method = $method;
-        }else{
+        } else {
             throw GatewayException::unknownRequestMethod($method);
         }
 
@@ -109,38 +109,51 @@ abstract class Gateway implements GatewayInterface
     {
         $class = Helper::getRequestClassName($entity, static::class);
 
-        if(!class_exists($class)){
+        if (!class_exists($class)) {
             throw new RuntimeException("Class request '$class' not found");
         }
 
         return (new $class)->setGateway($this);
     }
 
+
+    public function createEntity(string $entity, ...$args): Entity
+    {
+        $class = Helper::getEntityClassName($entity, static::class);
+
+        if (!class_exists($class)) {
+            throw new RuntimeException("Class entity '$class' not found");
+        }
+
+        return new $class(...$args);
+    }
+
+
     /**
      * @throws GatewayException|CouldNotCallApi
      */
     public function call(ApiRequestInterface|RequestBuilderInterface $request): ResponseInterface
     {
-        if($request instanceof RequestBuilderInterface){
+        if ($request instanceof RequestBuilderInterface) {
             $request = $request->build();
         }
 
         $url = $this->getWebhookEndpoint();
 
-        if($command = $request->getMethod()){
-            $url = str_ends_with($url, '/') ? $url : $url.'/';
-            $url = $url.$command;
+        if ($command = $request->getMethod()) {
+            $url = str_ends_with($url, '/') ? $url : $url . '/';
+            $url = $url . $command;
         }
 
         $options = $this->makeRequestOptions($request);
 
-        if(isset($options['body'])){
+        if (isset($options['body'])) {
             $this->method = $this->method === 'GET' ? 'POST' : $this->method;
         }
 
         try {
             $response = $this->client->request($this->method, $url, $options);
-        }catch (Exception | GuzzleException $e){
+        } catch (Exception | GuzzleException $e) {
             throw CouldNotCallApi::serviceRespondedException($e);
         }
 
@@ -161,14 +174,14 @@ abstract class Gateway implements GatewayInterface
             'verify' => $this->verify,
         ];
 
-        if(!empty($query)){
+        if (!empty($query)) {
             $options['query'] = $query;
         }
 
         $body = $request->getData();
         if (!empty($body)) {
             $options['body'] = function_exists($this->bodyEncodeMethod)
-                ? call_user_func($this->bodyEncodeMethod,($body))
+                ? call_user_func($this->bodyEncodeMethod, ($body))
                 : json_encode($body);
         }
 

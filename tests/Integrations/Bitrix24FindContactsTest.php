@@ -34,7 +34,7 @@ class Bitrix24FindContactsTest extends TestCase
     public function test_bitrix24_find_contacts_by_phone_or_email()
     {
         $expectIDs = [
-            'find.email' => [19604, 19606],
+            'find.email' => [19604, 19640],
             'find.phone' => [19604],
             'list.email' => [19604],
             'list.phone' => [19604],
@@ -84,31 +84,36 @@ class Bitrix24FindContactsTest extends TestCase
         $ids = $response->getResult()['find.phone']['CONTACT'];
         $this->assertEquals($expectIDs['find.phone'], $ids);
 
-        $ids = array_map(fn($item)=>$item['ID'], $response->getResult()['list.phone']);
+        $ids = array_map(fn($item) => $item['ID'], $response->getResult()['list.phone']);
         $this->assertEquals($expectIDs['list.phone'], $ids);
-        $ids = array_map(fn($item)=>$item['ID'], $response->getResult()['list.email']);
+        $ids = array_map(fn($item) => $item['ID'], $response->getResult()['list.email']);
         $this->assertEquals($expectIDs['list.email'], $ids);
     }
 
 
     public function test_bitrix24_find_contacts_by_contact()
     {
-        $contact = [
-            'id' => 19604,
-            'phone' => ['+7 900 123-12-12', '+7 900 123-12-10'],
-            'email' => 'test@test.ru',
-            'first_name' => 'алексей',
-            'last_name' => 'тест'
-        ];
+        $contact = $this->gateway
+            ->createEntity('contact', [
+                'id' => 19604,
+                'phone' => ['+7 900 123-12-12', '+7 900 123-12-10'],
+                'email' => 'test@test.ru',
+                'first_name' => 'алексей',
+                'last_name' => 'тест'
+            ]);
 
-        $builder = (new ContactBuilder())
+        $builder = $this->gateway
+            ->createRequestBuilder('contact')
             ->method('findBy')
             ->byContact($contact);
 
         $response = $this->gateway->call($builder);
 
         $this->assertInstanceOf(ContactFoundResponse::class, $response);
-        $this->assertCount(1, $response->getResult());
-        $this->assertEquals($contact['id'], $response->getResult()[0]['ID']);
+        $this->assertCount(1, $response->getResource()->getItems());
+
+        $item = $response->getResource()->getItems()[0];
+        $this->assertEquals($contact->id, $item->id);
+        $this->assertEquals([19604, 19640], $response->getLikeContactIds());
     }
 }

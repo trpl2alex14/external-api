@@ -3,20 +3,21 @@
 namespace ExternalApi\Common;
 
 use ExternalApi\Contracts\GatewayInterface;
+use ReflectionClass;
 
 
 class Helper
 {
     public static function getRequestClassName(string $shortName, $gateway): string
     {
-        $gateway = is_object($gateway) ? class_basename($gateway) : $gateway;
+        $gateway = is_object($gateway) ? (new ReflectionClass($gateway))->getName() : $gateway;
 
         if (is_subclass_of($shortName, Builder::class, true)) {
             return $shortName;
         }
 
         $namespace = substr($gateway, 0, strrpos($gateway, '\\'));
-        return $namespace.'\\'.ucfirst($shortName).'Builder';
+        return $namespace . '\\' . ucfirst($shortName) . 'Builder';
     }
 
 
@@ -38,6 +39,28 @@ class Helper
             $shortName .= '\\';
         }
 
-        return 'ExternalApi\\'.ucfirst($shortName).'Gateway';
+        return 'ExternalApi\\' . ucfirst($shortName) . 'Gateway';
+    }
+
+
+    public static function getMethodName(string $name, string $prefix = 'get'): string
+    {
+        $name = str_replace('_', '', ucwords($name, '_'));
+        if(!$prefix){
+            $name = lcfirst($name);
+        }
+
+        return $prefix . $name;
+    }
+
+
+    public static function getEntityClassName(string $shortName, string $gateway): string
+    {
+        if (is_subclass_of($shortName, Entity::class, true)) {
+            return $shortName;
+        }
+
+        $namespace = substr($gateway, 0, strrpos($gateway, '\\'));
+        return $namespace . '\\' . ucfirst($shortName);
     }
 }

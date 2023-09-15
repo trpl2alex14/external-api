@@ -3,9 +3,10 @@
 namespace ExternalApi\Bitrix24;
 
 use ExternalApi\Common\Builder;
-use ExternalApi\Common\Contact;
+use ExternalApi\Contracts\EntityInterface;
 use ExternalApi\Contracts\FilterInterface;
 use ExternalApi\Contracts\RequestBuilderInterface;
+use ExternalApi\Contracts\SearchContactInterface;
 use ExternalApi\Exceptions\BuilderException;
 
 
@@ -18,13 +19,13 @@ class ContactBuilder extends Builder
         //'update' => 'crm.contact.update',
     ];
 
-    protected string $entityFieldsClass = ContactFields::class;
+    protected string $entityClass = Contact::class;
 
 
     public function select(...$fields): self
     {
         $fields = !empty($fields) && !is_null($fields[0])
-            ? array_map(fn($field) => $this->getEntityFields()->getCode($field), $fields)
+            ? array_map(fn($field) => $this->getEntity()->getCode($field), $fields)
             : null;
 
         return $this
@@ -35,7 +36,7 @@ class ContactBuilder extends Builder
 
     public function where(callable $callable): self
     {
-        $filter = $callable(new Filter($this->getEntityFields()));
+        $filter = $callable(new Filter($this->getEntity()));
 
         return $this->setParameter('filter', $filter->getData());
     }
@@ -43,7 +44,7 @@ class ContactBuilder extends Builder
     /**
      * @throws BuilderException
      */
-    public function byContact(Contact|array $contact): RequestBuilderInterface
+    public function byContact(EntityInterface|SearchContactInterface|array $contact): RequestBuilderInterface
     {
         $contact = $this->makeContactArray($contact);
 
@@ -81,13 +82,13 @@ class ContactBuilder extends Builder
     }
 
 
-    private function makeContactArray(array|Contact $contact)
+    private function makeContactArray(SearchContactInterface|array $contact)
     {
         return array_filter([
-            'email' => $contact instanceof Contact ? $contact->getEmail() : $contact['email'] ?? null,
-            'phone' => $contact instanceof Contact ? $contact->getPhone() : $contact['phone'] ?? null,
-            'first_name' => $contact instanceof Contact ? $contact->getFirstName() : $contact['first_name'] ?? null,
-            'last_name' => $contact instanceof Contact ? $contact->getLastName() : $contact['last_name'] ?? null,
+            'email' => $contact instanceof SearchContactInterface ? $contact->getEmail() : $contact['email'] ?? null,
+            'phone' => $contact instanceof SearchContactInterface ? $contact->getPhone() : $contact['phone'] ?? null,
+            'first_name' => $contact instanceof SearchContactInterface ? $contact->getFirstName() : $contact['first_name'] ?? null,
+            'last_name' => $contact instanceof SearchContactInterface ? $contact->getLastName() : $contact['last_name'] ?? null,
         ]);
     }
 

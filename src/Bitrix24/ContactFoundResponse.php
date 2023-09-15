@@ -3,23 +3,19 @@
 namespace ExternalApi\Bitrix24;
 
 
-class ContactFoundResponse extends Response
+class ContactFoundResponse extends ContactListResponse
 {
-
-    public function getResult(): ?array
+    public function getLikeContactIds(): array
     {
-        $response = parent::getResult()['result'] ?? [];
+        $response = $this->getBody()['result']['result'] ?? [];
 
-        $response = array_column(array_merge(...array_values($response)), null, 'ID');
-
-        $contacts = [];
-
-        foreach ($response as $item) {
-            if (isset($item['ID'])) {
-                $contacts[] = $item;
+        $ids = [];
+        foreach ($response as $item){
+            if(isset($item['CONTACT'])){
+                array_push($ids, ...array_values($item['CONTACT']));
             }
         }
 
-        return $contacts;
+        return array_unique($ids);
     }
 }

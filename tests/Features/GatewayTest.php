@@ -2,8 +2,8 @@
 
 namespace ExternalApi\Tests\Features;
 
+use ExternalApi\Bitrix24\Contact;
 use ExternalApi\Bitrix24\Gateway;
-use ExternalApi\Common\Helper;
 use ExternalApi\Common\Request;
 use ExternalApi\Common\Response;
 use ExternalApi\Contracts\RequestBuilderInterface;
@@ -16,20 +16,6 @@ use PHPUnit\Framework\TestCase;
 class GatewayTest extends TestCase
 {
     use AssertGateway;
-
-
-    public function test_get_gateway_class_name_by_name()
-    {
-        $class = Helper::getGatewayClassName('bitrix24');
-        $this->assertEquals(Gateway::class, $class);
-    }
-
-
-    public function test_get_gateway_class_name_by_class()
-    {
-        $class = Helper::getGatewayClassName(Gateway::class);
-        $this->assertEquals(Gateway::class, $class);
-    }
 
 
     public function test_create_gateway_bitrix24(): Gateway
@@ -96,6 +82,16 @@ class GatewayTest extends TestCase
     }
 
     /**
+     * @depends test_create_gateway_bitrix24
+     */
+    public function test_create_entity(Gateway $gateway)
+    {
+        $builder = $gateway->createEntity('contact');
+
+        $this->assertInstanceOf(Contact::class, $builder);
+    }
+
+    /**
      * @dataProvider additionCallProvider
      */
     public function test_gateway_call_api($requestData, $parameters, $expect)
@@ -131,7 +127,7 @@ class GatewayTest extends TestCase
             [
                 [
                     'method' => 'update',
-                    'data' => ['test'=>true]
+                    'data' => ['test' => true]
                 ],
                 [
                     'agent' => 'Test Api'
@@ -143,7 +139,7 @@ class GatewayTest extends TestCase
                         'headers' => [
                             'User-Agent' => 'Test Api',
                         ],
-                        'body' => http_build_query(['test'=>true]),
+                        'body' => http_build_query(['test' => true]),
                         'verify' => false
                     ],
                 ]

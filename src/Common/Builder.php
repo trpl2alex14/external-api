@@ -3,7 +3,6 @@
 namespace ExternalApi\Common;
 
 use ExternalApi\Contracts\ApiRequestInterface;
-use ExternalApi\Contracts\EntityFieldsInterface;
 use ExternalApi\Contracts\GatewayInterface;
 use ExternalApi\Contracts\RequestBuilderInterface;
 
@@ -24,15 +23,15 @@ class Builder implements RequestBuilderInterface
 
     protected ?string $response = null;
 
-    protected string $entityFieldsClass = EntityFields::class;
+    protected string $entityClass = Entity::class;
 
-    private EntityFieldsInterface $entityFields;
+    private Entity $entity;
 
 
     public function __construct()
     {
-        if(class_exists($this->entityFieldsClass)) {
-            $this->entityFields = new $this->entityFieldsClass();
+        if (class_exists($this->entityClass)) {
+            $this->entity = new $this->entityClass();
         }
 
         $this->initialization();
@@ -45,9 +44,9 @@ class Builder implements RequestBuilderInterface
     }
 
 
-    public function getEntityFields(): EntityFieldsInterface
+    public function getEntity(): Entity
     {
-        return $this->entityFields;
+        return $this->entity;
     }
 
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace ExternalApi\Tests\Features;
+namespace ExternalApi\Tests\Features\Bitrix24;
 
 use ExternalApi\Bitrix24\BatchBuilder;
 use ExternalApi\Bitrix24\Gateway;

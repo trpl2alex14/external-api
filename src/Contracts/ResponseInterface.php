@@ -10,4 +10,6 @@ interface ResponseInterface
     public function getHeaders();
 
     public function getBody();
+
+    public function getResource();
 }

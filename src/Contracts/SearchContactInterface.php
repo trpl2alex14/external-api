@@ -3,7 +3,7 @@
 namespace ExternalApi\Contracts;
 
 
-interface ContactInterface
+interface SearchContactInterface extends EntityInterface
 {
     public function getPhone(): string|array;
 

@@ -10,6 +10,7 @@ class Response implements ResponseInterface
 {
     protected ?array $body = null;
 
+    protected string $entityClass = Entity::class;
 
     public function __construct(protected BaseResponse $response)
     {
@@ -38,5 +39,11 @@ class Response implements ResponseInterface
     public function getBody()
     {
         return $this->body;
+    }
+
+
+    public function getResource(): Entity|EntityList
+    {
+        return new $this->entityClass($this->body);
     }
 }

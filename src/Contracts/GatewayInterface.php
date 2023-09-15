@@ -15,5 +15,7 @@ interface GatewayInterface
 
     public function call(ApiRequestInterface $request): ResponseInterface;
 
+    public function createEntity(string $entity, ...$args): EntityInterface;
+
     public function getWebhookEndpoint(): string;
 }
