@@ -15,7 +15,7 @@ class ContactBuilder extends Builder
     protected array $methods = [
         'findBy' => 'crm.duplicate.findbycomm',
         'list' => 'crm.contact.list',
-        //'create' => 'crm.contact.add',
+        'create' => 'crm.contact.add',
         //'update' => 'crm.contact.update',
     ];
 
@@ -108,16 +108,39 @@ class ContactBuilder extends Builder
     }
 
 
+    public function setNotify(bool $notify): self
+    {
+        return $this->setParameter('notify', $notify ? 'Y' : 'N');
+    }
+
+
     public function getData(): array
     {
         return match ($this->getMethod()) {
-            'crm.duplicate.findbycomm' => $this->findByData(),
+            'crm.duplicate.findbycomm' => $this->makeDataForFindBy(),
+            'crm.contact.add' => $this->makeDataForAdd(),
             default => parent::getData(),
         };
     }
 
 
-    private function findByData(): array
+    private function makeDataForAdd(): array
+    {
+        $data = [
+            'fields' => $this->getFields(),
+            'params' => []
+        ];
+        if(!is_null($notify = $this->getParameter('notify'))){
+            $data['params']['REGISTER_SONET_EVENT'] = $notify;
+        }
+
+        $this->response = ContactAddResponse::class;
+
+        return $data;
+    }
+
+
+    private function makeDataForFindBy(): array
     {
         $phone = $this->getParameter('phone');
         $email = $this->getParameter('email');
