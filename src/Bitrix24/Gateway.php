@@ -2,6 +2,7 @@
 
 namespace ExternalApi\Bitrix24;
 
+use ExternalApi\Bitrix24\Responses\Response;
 use ExternalApi\Common\Gateway as BaseGateway;
 use ExternalApi\Common\Response as BaseResponse;
 use ExternalApi\Contracts\ApiRequestInterface;

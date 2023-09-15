@@ -4,7 +4,7 @@ namespace ExternalApi\Tests\Integrations;
 
 use ExternalApi\Bitrix24\Gateway;
 use ExternalApi\Common\Builder;
-use ExternalApi\Bitrix24\Response;
+use ExternalApi\Bitrix24\Responses\Response;
 use ExternalApi\ExternalApi;
 use PHPUnit\Framework\TestCase;
 

@@ -3,9 +3,9 @@
 namespace ExternalApi\Tests\Integrations;
 
 use ExternalApi\Bitrix24\BatchBuilder;
-use ExternalApi\Bitrix24\BatchResponse;
+use ExternalApi\Bitrix24\Responses\BatchResponse;
 use ExternalApi\Bitrix24\ContactBuilder;
-use ExternalApi\Bitrix24\ContactFoundResponse;
+use ExternalApi\Bitrix24\Responses\ContactFoundResponse;
 use ExternalApi\Bitrix24\Gateway;
 use ExternalApi\Contracts\FilterInterface;
 use ExternalApi\ExternalApi;

@@ -2,6 +2,9 @@
 
 namespace ExternalApi\Bitrix24;
 
+use ExternalApi\Bitrix24\Entities\Contact;
+use ExternalApi\Bitrix24\Responses\ContactAddResponse;
+use ExternalApi\Bitrix24\Responses\ContactFoundResponse;
 use ExternalApi\Common\Builder;
 use ExternalApi\Contracts\EntityInterface;
 use ExternalApi\Contracts\FilterInterface;

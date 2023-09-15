@@ -2,7 +2,7 @@
 
 namespace ExternalApi\Tests\Features\Bitrix24;
 
-use ExternalApi\Bitrix24\Contact;
+use ExternalApi\Bitrix24\Entities\Contact;
 use PHPUnit\Framework\TestCase;
 
 

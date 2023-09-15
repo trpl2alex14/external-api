@@ -61,6 +61,6 @@ class Helper
         }
 
         $namespace = substr($gateway, 0, strrpos($gateway, '\\'));
-        return $namespace . '\\' . ucfirst($shortName);
+        return $namespace . '\\Entities\\' . ucfirst($shortName);
     }
 }

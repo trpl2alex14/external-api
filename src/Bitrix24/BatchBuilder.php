@@ -2,6 +2,7 @@
 
 namespace ExternalApi\Bitrix24;
 
+use ExternalApi\Bitrix24\Responses\BatchResponse;
 use ExternalApi\Common\Builder;
 use ExternalApi\Exceptions\BuilderException;
 

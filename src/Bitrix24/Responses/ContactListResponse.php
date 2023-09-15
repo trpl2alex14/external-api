@@ -1,6 +1,8 @@
 <?php
 
-namespace ExternalApi\Bitrix24;
+namespace ExternalApi\Bitrix24\Responses;
+
+use ExternalApi\Bitrix24\Entities\ContactList;
 
 
 class ContactListResponse extends Response

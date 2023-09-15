@@ -1,6 +1,6 @@
 <?php
 
-namespace ExternalApi\Bitrix24;
+namespace ExternalApi\Bitrix24\Entities;
 
 use ExternalApi\Common\Entity;
 use ExternalApi\Contracts\SearchContactInterface;

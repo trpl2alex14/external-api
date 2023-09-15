@@ -1,6 +1,6 @@
 <?php
 
-namespace ExternalApi\Bitrix24;
+namespace ExternalApi\Bitrix24\Responses;
 
 use ExternalApi\Common\Entity;
 use ExternalApi\Common\EntityList;
@@ -9,7 +9,7 @@ use ExternalApi\Common\Response as ResponseBase;
 
 class Response extends ResponseBase
 {
-    public function getResult(): ?array
+    public function getResult(): mixed
     {
         return $this->getBody()['result'] ?? null;
     }

@@ -2,7 +2,7 @@
 
 namespace ExternalApi\Tests\Features;
 
-use ExternalApi\Bitrix24\Contact;
+use ExternalApi\Bitrix24\Entities\Contact;
 use ExternalApi\Bitrix24\Gateway;
 use ExternalApi\Common\Request;
 use ExternalApi\Common\Response;

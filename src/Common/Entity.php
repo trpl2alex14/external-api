@@ -29,6 +29,12 @@ class Entity implements EntityFieldsInterface, EntityInterface
     }
 
 
+    public function getFields(): array
+    {
+        return $this->fields;
+    }
+
+
     public function getCode(string $name): string
     {
         return $this->fieldCodes[$name] ?? $name;
