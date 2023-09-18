@@ -145,7 +145,7 @@ class Builder implements RequestBuilderInterface
 
     public function getId(): ?int
     {
-        return $this->parameters['id'];
+        return $this->parameters['id'] ?? null;
     }
 
 

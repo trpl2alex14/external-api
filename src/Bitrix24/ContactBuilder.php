@@ -23,31 +23,13 @@ class ContactBuilder extends Builder
     protected array $methods = [
         'findBy' => 'crm.duplicate.findbycomm',
         'list' => 'crm.contact.list',
+        'get' => 'crm.contact.get',
         'create' => 'crm.contact.add',
         //'update' => 'crm.contact.update',
+        //'delete' => 'crm.contact.delete',
     ];
 
     protected string $entityClass = Contact::class;
-
-
-    public function select(...$fields): self
-    {
-        $fields = !empty($fields) && !is_null($fields[0])
-            ? array_map(fn($field) => $this->getEntity()->getCode($field), $fields)
-            : null;
-
-        return $this
-            ->method('list')
-            ->setParameter('select', $fields);
-    }
-
-
-    public function where(callable $callable): self
-    {
-        $filter = $callable(new Filter($this->getEntity()));
-
-        return $this->setParameter('filter', $filter->getData());
-    }
 
     /**
      * @throws BuilderException
@@ -115,20 +97,35 @@ class ContactBuilder extends Builder
         return $searchBuilders;
     }
 
-
-    public function setNotify(bool $notify): self
-    {
-        return $this->setParameter('notify', $notify ? 'Y' : 'N');
-    }
-
-
+    /**
+     * @throws BuilderException
+     */
     public function getData(): array
     {
         return match ($this->getMethod()) {
             'crm.duplicate.findbycomm' => $this->makeDataForFindBy(),
             'crm.contact.add' => $this->makeDataForAdd(),
+            'crm.contact.get' => $this->makeDataForGet(),
             default => parent::getData(),
         };
+    }
+
+    /**
+     * @throws BuilderException
+     */
+    private function makeDataForGet(): array
+    {
+        if (is_null($id = $this->getId())) {
+            throw BuilderException::requiredParameters('id');
+        }
+
+        $data = [
+            'id' => $id
+        ];
+
+        $this->response = ContactResponse::class;
+
+        return $data;
     }
 
 
