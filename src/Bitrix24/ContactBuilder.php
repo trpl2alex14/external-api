@@ -81,7 +81,7 @@ class ContactBuilder extends Builder
                 ->takeInputFrom($name, null, 'filter[ID]', 'CONTACT');
         }
 
-        return $batch->setResponse(ContactFoundResponse::class);
+        return $batch->setResponse(ContactFoundResponse::class)->setGateway($this->gateway);
     }
 
 

@@ -5,6 +5,7 @@ namespace ExternalApi\Common;
 use ExternalApi\Contracts\ApiRequestInterface;
 use ExternalApi\Contracts\GatewayInterface;
 use ExternalApi\Contracts\RequestBuilderInterface;
+use ExternalApi\Contracts\ResponseInterface;
 
 
 class Builder implements RequestBuilderInterface
@@ -168,4 +169,12 @@ class Builder implements RequestBuilderInterface
     {
         return $this->parameters;
     }
+
+
+    public function call(): ResponseInterface
+    {
+        return $this->gateway->call($this);
+    }
+
+
 }

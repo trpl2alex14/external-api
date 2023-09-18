@@ -10,4 +10,6 @@ interface RequestBuilderInterface
     public function setParameters(?array $parameters): self;
 
     public function build();
+
+    public function call(): ResponseInterface;
 }

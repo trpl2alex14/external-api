@@ -102,12 +102,11 @@ class Bitrix24FindContactsTest extends TestCase
                 'last_name' => 'тест'
             ]);
 
-        $builder = $this->gateway
+        $response = $this->gateway
             ->createRequestBuilder('contact')
             ->method('findBy')
-            ->byContact($contact);
-
-        $response = $this->gateway->call($builder);
+            ->byContact($contact)
+            ->call();
 
         $this->assertInstanceOf(ContactFoundResponse::class, $response);
         $this->assertCount(1, $response->getResource()->getItems());
