@@ -12,6 +12,8 @@ class Entity implements EntityFieldsInterface, EntityInterface
         'id' => 'ID'
     ];
 
+    protected array $multiFields = [];
+
     protected array $fields = [];
 
 
@@ -48,7 +50,17 @@ class Entity implements EntityFieldsInterface, EntityInterface
             return call_user_func_array([$this, $method], []);
         }
 
-        return $this->fields[$this->getCode($name)] ?? null;
+        $value = $this->fields[$this->getCode($name)] ?? null;
+
+        return in_array($name, $this->multiFields)
+            ? $this->fromMultiField($value, $name)
+            : $value;
+    }
+
+
+    protected function fromMultiField(mixed $value, ?string $name = null)
+    {
+        return $value;
     }
 
 
@@ -59,9 +71,17 @@ class Entity implements EntityFieldsInterface, EntityInterface
             return call_user_func_array([$this, $method], [$value]);
         }
 
-        $this->fields[$this->getCode($name)] = $value;
+        $this->fields[$this->getCode($name)] = in_array($name, $this->multiFields)
+            ? $this->toMultiField($value, $name)
+            : $value;
 
         return $this;
+    }
+
+
+    protected function toMultiField(mixed $value, ?string $name = null)
+    {
+        return $value;
     }
 
 

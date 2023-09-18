@@ -12,15 +12,17 @@ class Contact extends Entity implements SearchContactInterface
         'id' => 'ID',
         'first_name' => 'NAME',
         'last_name' => 'LAST_NAME',
-        'phone' => "PHONE",
-        'email' => "EMAIL",
-        //todo
+        'second_name' => 'SECOND_NAME',
+        'phone' => 'PHONE',
+        'email' => 'EMAIL',
+        'comments' => 'COMMENTS'
     ];
 
-    public function getPhone(): string|array
-    {
-        $value = $this->getField('phone', false);
+    protected array $multiFields = ['phone', 'email'];
 
+
+    protected function fromMultiField(mixed $value, ?string $name = null)
+    {
         if (is_array($value)) {
             $value = array_column($value, 'VALUE');
         }
@@ -29,33 +31,35 @@ class Contact extends Entity implements SearchContactInterface
     }
 
 
-    public function setPhone(array|string $value): self
+    protected function toMultiField(mixed $value, ?string $name = null)
     {
         $value = is_string($value) ? [$value] : $value;
-        $value = array_map(fn($item) => ['VALUE' => $item], $value);
 
+        return is_array($value) ? array_map(fn($item) => is_array($item) ? $item : ['VALUE' => $item], $value) : $value;
+    }
+
+
+    public function getPhone(): string|array
+    {
+        return $this->getField('phone', false);
+    }
+
+
+    public function setPhone(array|string $value): self
+    {
         return $this->setField('phone', $value, false);
     }
 
 
     public function getEmail(): string|array
     {
-        $value = $this->getField('email');
-
-        if (is_array($value)) {
-            $value = array_column($value, 'VALUE');
-        }
-
-        return $value;
+        return $this->getField('email', false);
     }
 
 
     public function setEmail(array|string $value): self
     {
-        $value = is_string($value) ? [$value] : $value;
-        $value = array_map(fn($item) => ['VALUE' => $item], $value);
-
-        return $this->setField('email', $value);
+        return $this->setField('email', $value, false);
     }
 
 
