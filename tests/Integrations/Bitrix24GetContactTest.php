@@ -52,7 +52,7 @@ class Bitrix24GetContactTest extends TestCase
         $this->assertEquals(19604, $resource->id);
         $this->assertEquals('Алексей', $resource->first_name);
         $this->assertEquals('Тест', $resource->last_name);
-        $this->assertEquals(['+79001231212'], $resource->phone);
-        $this->assertEquals(['test@test.ru'], $resource->email);
+        $this->assertEquals([122048 => '+79001231212'], $resource->phone);
+        $this->assertEquals([122050 => 'test@test.ru'], $resource->email);
     }
 }

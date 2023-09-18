@@ -3,7 +3,7 @@
 namespace ExternalApi\Bitrix24;
 
 use ExternalApi\Bitrix24\Entities\Contact;
-use ExternalApi\Bitrix24\Responses\ContactAddResponse;
+use ExternalApi\Bitrix24\Responses\ContactIdResponse;
 use ExternalApi\Bitrix24\Responses\ContactFoundResponse;
 use ExternalApi\Bitrix24\Responses\ContactResponse;
 use ExternalApi\Bitrix24\Traits\Filterable;
@@ -25,7 +25,7 @@ class ContactBuilder extends Builder
         'list' => 'crm.contact.list',
         'get' => 'crm.contact.get',
         'create' => 'crm.contact.add',
-        //'update' => 'crm.contact.update',
+        'update' => 'crm.contact.update',
         //'delete' => 'crm.contact.delete',
     ];
 
@@ -106,8 +106,32 @@ class ContactBuilder extends Builder
             'crm.duplicate.findbycomm' => $this->makeDataForFindBy(),
             'crm.contact.add' => $this->makeDataForAdd(),
             'crm.contact.get' => $this->makeDataForGet(),
+            'crm.contact.update' => $this->makeDataForUpdate(),
             default => parent::getData(),
         };
+    }
+
+    /**
+     * @throws BuilderException
+     */
+    private function makeDataForUpdate(): array
+    {
+        if (is_null($id = $this->getId())) {
+            throw BuilderException::requiredParameters('id');
+        }
+
+        $data = [
+            'id' => $id,
+            'fields' => $this->getFields(),
+            'params' => []
+        ];
+        if (!is_null($notify = $this->getNotify())) {
+            $data['params']['REGISTER_SONET_EVENT'] = $notify;
+        }
+
+        $this->response = ContactIdResponse::class;
+
+        return $data;
     }
 
     /**
@@ -139,7 +163,7 @@ class ContactBuilder extends Builder
             $data['params']['REGISTER_SONET_EVENT'] = $notify;
         }
 
-        $this->response = ContactAddResponse::class;
+        $this->response = ContactIdResponse::class;
 
         return $data;
     }

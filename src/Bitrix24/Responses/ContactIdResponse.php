@@ -5,7 +5,7 @@ namespace ExternalApi\Bitrix24\Responses;
 use ExternalApi\Bitrix24\Entities\Contact;
 
 
-class ContactAddResponse extends Response
+class ContactIdResponse extends Response
 {
     protected string $entityClass = Contact::class;
 

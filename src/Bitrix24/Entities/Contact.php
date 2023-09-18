@@ -24,7 +24,7 @@ class Contact extends Entity implements SearchContactInterface
     protected function fromMultiField(mixed $value, ?string $name = null)
     {
         if (is_array($value)) {
-            $value = array_column($value, 'VALUE');
+            $value = array_column($value, 'VALUE', 'ID');
         }
 
         return $value;

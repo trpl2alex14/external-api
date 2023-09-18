@@ -2,7 +2,7 @@
 
 namespace ExternalApi\Tests\Integrations;
 
-use ExternalApi\Bitrix24\Responses\ContactAddResponse;
+use ExternalApi\Bitrix24\Responses\ContactIdResponse;
 use ExternalApi\Bitrix24\Gateway;
 use ExternalApi\ExternalApi;
 use PHPUnit\Framework\TestCase;
@@ -45,7 +45,7 @@ class Bitrix24AddContactTest extends TestCase
 
         $response = $this->gateway->call($builder);
 
-        $this->assertInstanceOf(ContactAddResponse::class, $response);
+        $this->assertInstanceOf(ContactIdResponse::class, $response);
         $resource = $response->getResource();
         $this->assertGreaterThan(19600, $resource->id);
     }
