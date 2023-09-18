@@ -5,6 +5,9 @@ namespace ExternalApi\Bitrix24;
 use ExternalApi\Bitrix24\Entities\Contact;
 use ExternalApi\Bitrix24\Responses\ContactAddResponse;
 use ExternalApi\Bitrix24\Responses\ContactFoundResponse;
+use ExternalApi\Bitrix24\Responses\ContactResponse;
+use ExternalApi\Bitrix24\Traits\Filterable;
+use ExternalApi\Bitrix24\Traits\Notified;
 use ExternalApi\Common\Builder;
 use ExternalApi\Contracts\EntityInterface;
 use ExternalApi\Contracts\FilterInterface;
@@ -15,6 +18,8 @@ use ExternalApi\Exceptions\BuilderException;
 
 class ContactBuilder extends Builder
 {
+    use Filterable, Notified;
+
     protected array $methods = [
         'findBy' => 'crm.duplicate.findbycomm',
         'list' => 'crm.contact.list',
@@ -133,7 +138,7 @@ class ContactBuilder extends Builder
             'fields' => $this->getFields(),
             'params' => []
         ];
-        if(!is_null($notify = $this->getParameter('notify'))){
+        if (!is_null($notify = $this->getNotify())) {
             $data['params']['REGISTER_SONET_EVENT'] = $notify;
         }
 
