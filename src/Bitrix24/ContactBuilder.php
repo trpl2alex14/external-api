@@ -26,10 +26,17 @@ class ContactBuilder extends Builder
         'get' => 'crm.contact.get',
         'create' => 'crm.contact.add',
         'update' => 'crm.contact.update',
-        //'delete' => 'crm.contact.delete',
+        'delete' => 'crm.contact.delete',
     ];
 
     protected string $entityClass = Contact::class;
+
+    protected array $requiredParametersForMethod = [
+        'crm.contact.get' => 'id',
+        'crm.contact.update' => 'id',
+        'crm.contact.delete' => 'id',
+        'crm.duplicate.findbycomm' => 'phone|email'
+    ];
 
     /**
      * @throws BuilderException
@@ -97,9 +104,7 @@ class ContactBuilder extends Builder
         return $searchBuilders;
     }
 
-    /**
-     * @throws BuilderException
-     */
+
     public function getData(): array
     {
         return match ($this->getMethod()) {
@@ -111,17 +116,11 @@ class ContactBuilder extends Builder
         };
     }
 
-    /**
-     * @throws BuilderException
-     */
+
     private function makeDataForUpdate(): array
     {
-        if (is_null($id = $this->getId())) {
-            throw BuilderException::requiredParameters('id');
-        }
-
         $data = [
-            'id' => $id,
+            'id' => $this->getId(),
             'fields' => $this->getFields(),
             'params' => []
         ];
@@ -134,17 +133,11 @@ class ContactBuilder extends Builder
         return $data;
     }
 
-    /**
-     * @throws BuilderException
-     */
+
     private function makeDataForGet(): array
     {
-        if (is_null($id = $this->getId())) {
-            throw BuilderException::requiredParameters('id');
-        }
-
         $data = [
-            'id' => $id
+            'id' => $this->getId()
         ];
 
         $this->response = ContactResponse::class;
@@ -173,10 +166,6 @@ class ContactBuilder extends Builder
     {
         $phone = $this->getParameter('phone');
         $email = $this->getParameter('email');
-
-        if (empty($phone) && empty($email)) {
-            BuilderException::requiredParameters('phone or email');
-        }
 
         $values = [];
         if (!empty($phone)) {

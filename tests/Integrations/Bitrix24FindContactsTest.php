@@ -8,6 +8,7 @@ use ExternalApi\Bitrix24\ContactBuilder;
 use ExternalApi\Bitrix24\Responses\ContactFoundResponse;
 use ExternalApi\Bitrix24\Gateway;
 use ExternalApi\Contracts\FilterInterface;
+use ExternalApi\Exceptions\BuilderException;
 use ExternalApi\ExternalApi;
 use PHPUnit\Framework\TestCase;
 
@@ -114,5 +115,23 @@ class Bitrix24FindContactsTest extends TestCase
         $item = $response->getResource()->getItems()[0];
         $this->assertEquals($contact->id, $item->id);
         $this->assertEquals([19604, 19640], $response->getLikeContactIds());
+    }
+
+
+    public function test_bitrix24_can_not_find_contacts_without_phone_and_email()
+    {
+        $this->expectException(BuilderException::class);
+
+        $contact = $this->gateway
+            ->createEntity('contact', [
+                'first_name' => 'алексей',
+                'last_name' => 'тест'
+            ]);
+
+        $response = $this->gateway
+            ->createRequestBuilder('contact')
+            ->method('findBy')
+            ->byContact($contact)
+            ->call();
     }
 }

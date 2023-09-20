@@ -5,11 +5,11 @@ namespace ExternalApi\Contracts;
 
 interface SearchContactInterface extends EntityInterface
 {
-    public function getPhone(): string|array;
+    public function getPhone(): null|string|array;
 
-    public function getEmail(): string|array;
+    public function getEmail(): null|string|array;
 
-    public function getFirstName(): string;
+    public function getFirstName(): ?string;
 
-    public function getLastName(): string;
+    public function getLastName(): ?string;
 }

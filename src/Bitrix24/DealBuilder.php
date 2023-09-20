@@ -23,11 +23,16 @@ class DealBuilder extends Builder
         'get' => 'crm.deal.get',
         'update' => 'crm.deal.update',
         'list' => 'crm.deal.list',
-        //'delete' => 'crm.contact.delete',
+        'delete' => 'crm.deal.delete',
     ];
 
     protected string $entityClass = Deal::class;
 
+    protected array $requiredParametersForMethod = [
+        'crm.deal.get' => 'id',
+        'crm.deal.update' => 'id',
+        'crm.deal.delete' => 'id',
+    ];
 
     /**
      * @param Contact[]|int[] $clients
@@ -175,17 +180,11 @@ class DealBuilder extends Builder
         return $data;
     }
 
-    /**
-     * @throws BuilderException
-     */
+
     private function makeDataForGet(): array
     {
-        if (is_null($id = $this->getId())) {
-            throw BuilderException::requiredParameters('id');
-        }
-
         $data = [
-            'id' => $id
+            'id' => $this->getId()
         ];
 
         $this->response = DealResponse::class;
@@ -193,17 +192,11 @@ class DealBuilder extends Builder
         return $data;
     }
 
-    /**
-     * @throws BuilderException
-     */
+
     private function makeDataForUpdate(): array
     {
-        if (is_null($id = $this->getId())) {
-            throw BuilderException::requiredParameters('id');
-        }
-
         $data = [
-            'id' => $id,
+            'id' => $this->getId(),
             'fields' => $this->getFields(),
             'params' => []
         ];

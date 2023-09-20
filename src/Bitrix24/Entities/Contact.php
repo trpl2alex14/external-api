@@ -39,7 +39,7 @@ class Contact extends Entity implements SearchContactInterface
     }
 
 
-    public function getPhone(): string|array
+    public function getPhone(): null|string|array
     {
         return $this->getField('phone', false);
     }
@@ -51,7 +51,7 @@ class Contact extends Entity implements SearchContactInterface
     }
 
 
-    public function getEmail(): string|array
+    public function getEmail(): null|string|array
     {
         return $this->getField('email', false);
     }
@@ -63,13 +63,13 @@ class Contact extends Entity implements SearchContactInterface
     }
 
 
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->getField('first_name');
     }
 
 
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->getField('last_name');
     }

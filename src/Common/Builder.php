@@ -6,6 +6,7 @@ use ExternalApi\Contracts\ApiRequestInterface;
 use ExternalApi\Contracts\GatewayInterface;
 use ExternalApi\Contracts\RequestBuilderInterface;
 use ExternalApi\Contracts\ResponseInterface;
+use ExternalApi\Exceptions\BuilderException;
 
 
 class Builder implements RequestBuilderInterface
@@ -27,6 +28,8 @@ class Builder implements RequestBuilderInterface
     protected string $entityClass = Entity::class;
 
     private Entity $entity;
+
+    protected array $requiredParametersForMethod = [];
 
 
     public function __construct()
@@ -148,9 +151,13 @@ class Builder implements RequestBuilderInterface
         return $this->parameters['id'] ?? null;
     }
 
-
+    /**
+     * @throws BuilderException
+     */
     public function build(): ApiRequestInterface
     {
+        $this->validate();
+
         $data = $this->getData();
 
         return new Request(
@@ -162,6 +169,40 @@ class Builder implements RequestBuilderInterface
             ],
             $this->response
         );
+    }
+
+
+    /**
+     * @throws BuilderException
+     */
+    protected function validate()
+    {
+        if (empty($this->requiredParametersForMethod)) {
+            return;
+        }
+
+        $requiredParameters = $this->requiredParametersForMethod[$this->method] ?? null;
+
+        if (empty($requiredParameters)) {
+            return;
+        }
+
+        $requiredParameters = is_string($requiredParameters) ? [$requiredParameters] : $requiredParameters;
+
+        foreach ($requiredParameters as $parameter) {
+            $parameters = explode('|', $parameter);
+
+            $emptyParameters = array_filter(
+                array_map(
+                    fn($parameter) => is_null($this->getParameter($parameter)) ? $parameter : null,
+                    $parameters
+                )
+            );
+
+            if (!empty($emptyParameters)) {
+                throw BuilderException::requiredParameters(implode(',', $emptyParameters));
+            }
+        }
     }
 
 

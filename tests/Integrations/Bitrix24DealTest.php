@@ -6,6 +6,8 @@ use ExternalApi\Bitrix24\Gateway;
 use ExternalApi\Bitrix24\Responses\DealBatchResponse;
 use ExternalApi\Bitrix24\Responses\DealIdResponse;
 use ExternalApi\Bitrix24\Responses\DealResponse;
+use ExternalApi\Common\Response;
+use ExternalApi\Exceptions\BuilderException;
 use ExternalApi\ExternalApi;
 use PHPUnit\Framework\TestCase;
 
@@ -142,5 +144,52 @@ class Bitrix24DealTest extends TestCase
         foreach ($this->demoFields as $key => $value) {
             $this->assertEquals($value, $resource->getField($key));
         }
+    }
+
+    /**
+     * @depends test_bitrix24_add_deal
+     */
+    public function test_bitrix24_delete_deal($id)
+    {
+        $response = $this->gateway
+            ->createRequestBuilder('deal')
+            ->method('delete')
+            ->setId($id)
+            ->call();
+
+        $this->assertInstanceOf(Response::class, $response);
+    }
+
+
+    public function test_bitrix24_can_not_get_deal_without_id()
+    {
+        $this->expectException(BuilderException::class);
+
+        $this->gateway
+            ->createRequestBuilder('deal')
+            ->method('get')
+            ->call();
+    }
+
+
+    public function test_bitrix24_can_not_update_deal_without_id()
+    {
+        $this->expectException(BuilderException::class);
+
+        $this->gateway
+            ->createRequestBuilder('deal')
+            ->method('update')
+            ->call();
+    }
+
+
+    public function test_bitrix24_can_not_delete_deal_without_id()
+    {
+        $this->expectException(BuilderException::class);
+
+        $this->gateway
+            ->createRequestBuilder('deal')
+            ->method('delete')
+            ->build();
     }
 }
