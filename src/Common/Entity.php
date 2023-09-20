@@ -25,6 +25,14 @@ class Entity implements EntityFieldsInterface, EntityInterface
     }
 
 
+    public function setSettingFields(array $settings): self
+    {
+        $this->fieldCodes = array_merge($this->fieldCodes, $settings);
+
+        return $this;
+    }
+
+
     public function getRaw(): array
     {
         return $this->fields;
@@ -34,6 +42,16 @@ class Entity implements EntityFieldsInterface, EntityInterface
     public function getFields(): array
     {
         return $this->fields;
+    }
+
+
+    public function setFields(array $fields): self
+    {
+        foreach ($fields as $key => $value) {
+            $this->setField($key, $value, true);
+        }
+
+        return $this;
     }
 
 
