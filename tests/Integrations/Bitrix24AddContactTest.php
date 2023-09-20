@@ -27,7 +27,7 @@ class Bitrix24AddContactTest extends TestCase
     }
 
 
-    public function test_bitrix24_find_contacts_by_contact()
+    public function test_bitrix24_add_contact()
     {
         $contact = $this->gateway
             ->createEntity('contact', [
