@@ -7,7 +7,7 @@ class ContactFoundResponse extends ContactListResponse
 {
     public function getLikeContactIds(): array
     {
-        $response = $this->getBody()['result']['result'] ?? [];
+        $response = $this->body['result']['result'] ?? [];
 
         $ids = [];
         foreach ($response as $item){

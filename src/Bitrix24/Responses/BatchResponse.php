@@ -5,9 +5,8 @@ namespace ExternalApi\Bitrix24\Responses;
 
 class BatchResponse extends Response
 {
-
-    public function getResult(): ?array
+    public function getBody()
     {
-        return parent::getResult()['result'] ?? null;
+        return parent::getBody()['result'] ?? null;
     }
 }

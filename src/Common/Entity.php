@@ -17,8 +17,12 @@ class Entity implements EntityFieldsInterface, EntityInterface
     protected array $fields = [];
 
 
-    public function __construct(array $fields = [])
+    public function __construct(array $fields = [], ?array $settingFields = null)
     {
+        if($settingFields){
+            $this->setSettingFields($settingFields);
+        }
+
         foreach ($fields as $key => $value) {
             $this->setField($key, $value, true);
         }

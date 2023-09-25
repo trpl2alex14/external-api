@@ -8,6 +8,9 @@ use ReflectionClass;
 
 class Helper
 {
+    /**
+     * @throws \ReflectionException
+     */
     public static function getRequestClassName(string $shortName, $gateway): string
     {
         $gateway = is_object($gateway) ? (new ReflectionClass($gateway))->getName() : $gateway;
@@ -62,5 +65,15 @@ class Helper
 
         $namespace = substr($gateway, 0, strrpos($gateway, '\\'));
         return $namespace . '\\Entities\\' . ucfirst($shortName);
+    }
+
+
+    public static function getEntityName(string|Entity $entity): string
+    {
+        $entity = is_object($entity) ? (new ReflectionClass($entity))->getName() : $entity;
+        $words = explode('\\', $entity);
+        $entity = array_pop($words);
+
+        return strtolower($entity);
     }
 }

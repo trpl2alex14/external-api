@@ -5,27 +5,23 @@ namespace ExternalApi\Common;
 use ExternalApi\Contracts\EntityListInterface;
 
 
-class EntityList implements EntityListInterface
+class EntityList extends Entity implements EntityListInterface
 {
     protected array $items;
 
     protected string $entityClass = Entity::class;
 
-    public function __construct(array $items, ?string $entityClass = null)
+
+    public function __construct(array $fields = [], ?array $settingFields = null)
     {
-        $this->entityClass = $entityClass ?: $this->entityClass;
-        $this->items = array_map(fn($item) => new $this->entityClass($item), $items);
+        $items = array_map(fn($item) => new $this->entityClass($item), $fields);
+
+        parent::__construct(['items' => $items], $settingFields);
     }
 
 
     public function getItems(): iterable
     {
-        return $this->items;
-    }
-
-
-    public function getRaw(): array
-    {
-        return $this->items;
+        return $this->getField('items');
     }
 }

@@ -2,8 +2,6 @@
 
 namespace ExternalApi\Bitrix24\Responses;
 
-use ExternalApi\Common\Entity;
-use ExternalApi\Common\EntityList;
 use ExternalApi\Common\Response as ResponseBase;
 
 
@@ -11,13 +9,13 @@ class Response extends ResponseBase
 {
     public function getResult(): mixed
     {
-        return $this->getBody()['result'] ?? null;
+        return $this->getBody();
     }
 
 
-    public function getResource(): Entity|EntityList
+    public function getBody()
     {
-        return new $this->entityClass($this->getResult());
+        return parent::getBody()['result'] ?? null;
     }
 
 

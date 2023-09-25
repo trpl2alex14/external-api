@@ -3,6 +3,10 @@
 namespace ExternalApi\Contracts;
 
 
+/**
+ * @method self select(string ...$fields)
+ * @method self where(callable $callback)
+ */
 interface RequestBuilderInterface
 {
     public function method($name): self;

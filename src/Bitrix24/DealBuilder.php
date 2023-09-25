@@ -7,6 +7,7 @@ use ExternalApi\Bitrix24\Entities\Deal;
 use ExternalApi\Bitrix24\Entities\ProductRow;
 use ExternalApi\Bitrix24\Responses\DealBatchResponse;
 use ExternalApi\Bitrix24\Responses\DealIdResponse;
+use ExternalApi\Bitrix24\Responses\DealListResponse;
 use ExternalApi\Bitrix24\Responses\DealResponse;
 use ExternalApi\Bitrix24\Traits\Filterable;
 use ExternalApi\Bitrix24\Traits\Notified;
@@ -81,6 +82,8 @@ class DealBuilder extends Builder
 
             return $batchData;
         }
+
+        $this->response = DealListResponse::class;
 
         return match ($this->getMethod()) {
             'crm.deal.add' => $this->makeDataForAdd(),

@@ -5,6 +5,7 @@ namespace ExternalApi\Tests\Features;
 use ExternalApi\Bitrix24\Entities\Contact;
 use ExternalApi\Bitrix24\ContactBuilder;
 use ExternalApi\Bitrix24\Gateway;
+use ExternalApi\Common\Entity;
 use ExternalApi\Common\Helper;
 use PHPUnit\Framework\TestCase;
 
@@ -59,5 +60,18 @@ class HelperTest extends TestCase
     {
         $name = Helper::getEntityClassName('contact', Gateway::class);
         $this->assertEquals(Contact::class, $name);
+    }
+
+
+    public function test_get_entity_name()
+    {
+        $name = Helper::getEntityName('contact');
+        $this->assertEquals('contact', $name);
+
+        $name = Helper::getEntityName(Contact::class);
+        $this->assertEquals('contact', $name);
+
+        $name = Helper::getEntityName(Entity::class);
+        $this->assertEquals('entity', $name);
     }
 }

@@ -12,7 +12,7 @@ class Response implements ResponseInterface
 
     protected string $entityClass = Entity::class;
 
-    public function __construct(protected BaseResponse $response)
+    public function __construct(protected BaseResponse $response, protected Gateway $gateway)
     {
         $this->body = json_decode($this->response?->getBody() ?: '{}', true);
     }
@@ -42,8 +42,8 @@ class Response implements ResponseInterface
     }
 
 
-    public function getResource(): Entity|EntityList
+    public function getResource(): Entity
     {
-        return new $this->entityClass($this->body);
+        return $this->gateway->createEntity($this->entityClass, $this->getBody());
     }
 }

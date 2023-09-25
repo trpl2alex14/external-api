@@ -36,7 +36,9 @@ class Bitrix24DealTest extends TestCase
         }
 
         $this->gateway = ExternalApi::create('bitrix24');
-        $this->gateway->setWebhookEndpoint($this->config['bitrix24_webhook_endpoint']);
+        $this->gateway
+            ->setWebhookEndpoint($this->config['bitrix24_webhook_endpoint'])
+            ->setEntitySettings($this->config['deal']['fieldCodes'], 'deal');
     }
 
 
@@ -44,7 +46,6 @@ class Bitrix24DealTest extends TestCase
     {
         $deal = $this->gateway
             ->createEntity('deal', ['title' => 'ТЕСТ - ИМ экспорт'])
-            ->setSettingFields($this->config['deal']['fieldCodes'])
             ->setFields($this->config['deal']['defaultFields'])
             ->setFields($this->demoFields);
 
@@ -138,8 +139,6 @@ class Bitrix24DealTest extends TestCase
         $resource = $response->getResource();
         $this->assertEquals($id, $resource->id);
         $this->assertEquals('ТЕСТ - ИМ экспорт обновление', $resource->title);
-
-        $resource->setSettingFields($this->config['deal']['fieldCodes']);
 
         foreach ($this->demoFields as $key => $value) {
             $this->assertEquals($value, $resource->getField($key));

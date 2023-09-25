@@ -33,7 +33,9 @@ class Bitrix24ProductTest extends TestCase
         }
 
         $this->gateway = ExternalApi::create('bitrix24');
-        $this->gateway->setWebhookEndpoint($this->config['bitrix24_webhook_endpoint']);
+        $this->gateway
+            ->setWebhookEndpoint($this->config['bitrix24_webhook_endpoint'])
+            ->setEntitySettings($this->config['product']['fieldCodes'], 'product');
     }
 
 
@@ -41,7 +43,6 @@ class Bitrix24ProductTest extends TestCase
     {
         $product = $this->gateway
             ->createEntity('product', ['name' => 'Тест 1'])
-            ->setSettingFields($this->config['product']['fieldCodes'])
             ->setFields($this->demoFields);
 
         $response = $this->gateway
@@ -112,8 +113,6 @@ class Bitrix24ProductTest extends TestCase
         $resource = $response->getResource();
         $this->assertEquals($id, $resource->id);
         $this->assertEquals('Тест 1 новинка', $resource->name);
-
-        $resource->setSettingFields($this->config['product']['fieldCodes']);
 
         foreach ($this->demoFields as $key => $value) {
             $this->assertEquals($value, $resource->{$key});

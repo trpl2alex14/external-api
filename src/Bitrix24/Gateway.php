@@ -38,7 +38,7 @@ class Gateway extends BaseGateway
 
         $response = parent::call($request);
         $response = get_class($response) === BaseResponse::class
-            ? new Response($response->getRawResponse())
+            ? new Response($response->getRawResponse(), $this)
             : $response;
 
         $time_end = microtime(true);

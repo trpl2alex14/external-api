@@ -30,12 +30,26 @@ abstract class Gateway implements GatewayInterface
 
     protected string $bodyEncodeMethod = 'json_encode';
 
+    protected ?array $entitySettings = null;
 
     public function __construct(protected ?Client $client = null)
     {
         $this->client = $this->client ?: new Client();
 
         $this->setHeader('User-Agent', 'External webhook client');
+    }
+
+
+    public function setEntitySettings(array $entitySettings, ?string $entity = null): self
+    {
+        if($entity){
+            $this->entitySettings = $this->entitySettings ?: [];
+            $this->entitySettings[$entity] = $entitySettings;
+        }else{
+            $this->entitySettings = $entitySettings;
+        }
+
+        return $this;
     }
 
 
@@ -125,9 +139,16 @@ abstract class Gateway implements GatewayInterface
             throw new RuntimeException("Class entity '$class' not found");
         }
 
+        $entityName = Helper::getEntityName($entity);
+        if(isset($this->entitySettings[$entityName])){
+            $args = [
+                ...$args,
+                $this->entitySettings[$entityName]
+            ];
+        }
+
         return new $class(...$args);
     }
-
 
     /**
      * @throws GatewayException|CouldNotCallApi
@@ -199,6 +220,6 @@ abstract class Gateway implements GatewayInterface
 
         $class = $class ?? Response::class;
 
-        return new $class($response);
+        return new $class($response, $this);
     }
 }

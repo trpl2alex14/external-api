@@ -9,9 +9,9 @@ class DealBatchResponse extends BatchResponse
 {
     protected string $entityClass = Deal::class;
 
-    public function getResult(): ?array
+    public function getBody(): ?array
     {
-        $response = parent::getResult()['deal.add'];
+        $response = parent::getBody()['deal.add'];
 
         return $response ? ['id' => $response] : null;
     }
