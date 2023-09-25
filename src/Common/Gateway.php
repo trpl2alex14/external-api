@@ -4,6 +4,7 @@ namespace ExternalApi\Common;
 
 use Exception;
 use ExternalApi\Contracts\ApiRequestInterface;
+use ExternalApi\Contracts\FilterBuilderInterface;
 use ExternalApi\Contracts\GatewayInterface;
 use ExternalApi\Contracts\RequestBuilderInterface;
 use ExternalApi\Contracts\ResponseInterface;
@@ -119,7 +120,7 @@ abstract class Gateway implements GatewayInterface
     }
 
 
-    public function createRequestBuilder(string $entity): RequestBuilderInterface
+    public function createRequestBuilder(string $entity): RequestBuilderInterface|FilterBuilderInterface
     {
         $class = Helper::getRequestClassName($entity, static::class);
 

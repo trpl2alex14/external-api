@@ -12,10 +12,11 @@ use ExternalApi\Bitrix24\Responses\DealResponse;
 use ExternalApi\Bitrix24\Traits\Filterable;
 use ExternalApi\Bitrix24\Traits\Notified;
 use ExternalApi\Common\Builder;
+use ExternalApi\Contracts\FilterBuilderInterface;
 use ExternalApi\Exceptions\BuilderException;
 
 
-class DealBuilder extends Builder
+class DealBuilder extends Builder implements FilterBuilderInterface
 {
     use Filterable, Notified;
 

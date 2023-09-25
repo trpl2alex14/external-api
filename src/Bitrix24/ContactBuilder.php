@@ -10,13 +10,14 @@ use ExternalApi\Bitrix24\Traits\Filterable;
 use ExternalApi\Bitrix24\Traits\Notified;
 use ExternalApi\Common\Builder;
 use ExternalApi\Contracts\EntityInterface;
+use ExternalApi\Contracts\FilterBuilderInterface;
 use ExternalApi\Contracts\FilterInterface;
 use ExternalApi\Contracts\RequestBuilderInterface;
 use ExternalApi\Contracts\SearchContactInterface;
 use ExternalApi\Exceptions\BuilderException;
 
 
-class ContactBuilder extends Builder
+class ContactBuilder extends Builder implements FilterBuilderInterface
 {
     use Filterable, Notified;
 

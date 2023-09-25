@@ -8,9 +8,10 @@ use ExternalApi\Bitrix24\Responses\ProductListResponse;
 use ExternalApi\Bitrix24\Responses\ProductResponse;
 use ExternalApi\Bitrix24\Traits\Filterable;
 use ExternalApi\Common\Builder;
+use ExternalApi\Contracts\FilterBuilderInterface;
 
 
-class ProductBuilder extends Builder
+class ProductBuilder extends Builder implements FilterBuilderInterface
 {
     use Filterable;
 
