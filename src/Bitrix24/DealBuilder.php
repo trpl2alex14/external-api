@@ -6,7 +6,6 @@ use ExternalApi\Bitrix24\Entities\Contact;
 use ExternalApi\Bitrix24\Entities\Deal;
 use ExternalApi\Bitrix24\Entities\ProductRow;
 use ExternalApi\Bitrix24\Responses\DealBatchResponse;
-use ExternalApi\Bitrix24\Responses\DealIdResponse;
 use ExternalApi\Bitrix24\Responses\DealListResponse;
 use ExternalApi\Bitrix24\Responses\DealResponse;
 use ExternalApi\Bitrix24\Traits\Filterable;
@@ -35,6 +34,8 @@ class DealBuilder extends Builder implements FilterBuilderInterface
         'crm.deal.update' => 'id',
         'crm.deal.delete' => 'id',
     ];
+
+    protected string $response = DealResponse::class;
 
     /**
      * @param Contact[]|int[] $clients
@@ -84,7 +85,9 @@ class DealBuilder extends Builder implements FilterBuilderInterface
             return $batchData;
         }
 
-        $this->response = DealListResponse::class;
+        if ($this->method === 'crm.deal.list') {
+            $this->response = DealListResponse::class;
+        }
 
         return match ($this->getMethod()) {
             'crm.deal.add' => $this->makeDataForAdd(),
@@ -179,21 +182,15 @@ class DealBuilder extends Builder implements FilterBuilderInterface
             $data['params']['REGISTER_SONET_EVENT'] = $notify;
         }
 
-        $this->response = DealIdResponse::class;
-
         return $data;
     }
 
 
     private function makeDataForGet(): array
     {
-        $data = [
+        return [
             'id' => $this->getId()
         ];
-
-        $this->response = DealResponse::class;
-
-        return $data;
     }
 
 
@@ -207,8 +204,6 @@ class DealBuilder extends Builder implements FilterBuilderInterface
         if (!is_null($notify = $this->getNotify())) {
             $data['params']['REGISTER_SONET_EVENT'] = $notify;
         }
-
-        $this->response = DealIdResponse::class;
 
         return $data;
     }

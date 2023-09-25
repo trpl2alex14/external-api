@@ -4,7 +4,6 @@ namespace ExternalApi\Tests\Integrations;
 
 use ExternalApi\Bitrix24\Gateway;
 use ExternalApi\Bitrix24\Responses\DealBatchResponse;
-use ExternalApi\Bitrix24\Responses\DealIdResponse;
 use ExternalApi\Bitrix24\Responses\DealResponse;
 use ExternalApi\Common\Response;
 use ExternalApi\Exceptions\BuilderException;
@@ -67,12 +66,12 @@ class Bitrix24DealTest extends TestCase
 
         $items = [
             $this->gateway->createEntity('productRow', [
-                    'name' => 'Тест 1',
-                    'price' => 10000,
-                    'quantity' => 5,
-                    'discount' => 1000,
-                    'tax' => 10,
-                ]),
+                'name' => 'Тест 1',
+                'price' => 10000,
+                'quantity' => 5,
+                'discount' => 1000,
+                'tax' => 10,
+            ]),
             $this->gateway->createEntity('productRow', [
                 'name' => 'Тест 2',
                 'price' => 1000,
@@ -119,7 +118,7 @@ class Bitrix24DealTest extends TestCase
             ->setId($id)
             ->call();
 
-        $this->assertInstanceOf(DealIdResponse::class, $response);
+        $this->assertInstanceOf(DealResponse::class, $response);
         $resource = $response->getResource();
         $this->assertEquals($id, $resource->id);
     }

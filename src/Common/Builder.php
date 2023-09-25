@@ -23,7 +23,7 @@ class Builder implements RequestBuilderInterface
 
     protected ?array $headers = null;
 
-    protected ?string $response = null;
+    protected string $response = Response::class;
 
     protected string $entityClass = Entity::class;
 
@@ -171,7 +171,6 @@ class Builder implements RequestBuilderInterface
         );
     }
 
-
     /**
      * @throws BuilderException
      */
@@ -216,6 +215,4 @@ class Builder implements RequestBuilderInterface
     {
         return $this->gateway->call($this);
     }
-
-
 }

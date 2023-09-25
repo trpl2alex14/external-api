@@ -15,7 +15,7 @@ class BatchBuilder extends Builder
 
     protected array $commands = [];
 
-    protected ?string $response = BatchResponse::class;
+    protected string $response = BatchResponse::class;
 
 
     protected function initialization()
@@ -63,7 +63,6 @@ class BatchBuilder extends Builder
 
         return $this;
     }
-
 
     /**
      * @throws BuilderException

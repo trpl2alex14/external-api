@@ -3,7 +3,6 @@
 namespace ExternalApi\Bitrix24;
 
 use ExternalApi\Bitrix24\Entities\Product;
-use ExternalApi\Bitrix24\Responses\ProductIdResponse;
 use ExternalApi\Bitrix24\Responses\ProductListResponse;
 use ExternalApi\Bitrix24\Responses\ProductResponse;
 use ExternalApi\Bitrix24\Traits\Filterable;
@@ -31,10 +30,14 @@ class ProductBuilder extends Builder implements FilterBuilderInterface
 
     protected string $entityClass = Product::class;
 
+    protected string $response = ProductResponse::class;
+
 
     public function getData(): array
     {
-        $this->response = ProductListResponse::class;
+        if ($this->method === 'crm.product.list') {
+            $this->response = ProductListResponse::class;
+        }
 
         return match ($this->getMethod()) {
             'crm.product.add' => $this->makeDataForAdd(),
@@ -47,37 +50,25 @@ class ProductBuilder extends Builder implements FilterBuilderInterface
 
     private function makeDataForUpdate(): array
     {
-        $data = [
+        return [
             'id' => $this->getId(),
             'fields' => $this->getFields(),
         ];
-
-        $this->response = ProductIdResponse::class;
-
-        return $data;
     }
 
 
     private function makeDataForGet(): array
     {
-        $data = [
+        return [
             'id' => $this->getId()
         ];
-
-        $this->response = ProductResponse::class;
-
-        return $data;
     }
 
 
     private function makeDataForAdd(): array
     {
-        $data = [
+        return [
             'fields' => $this->getFields(),
         ];
-
-        $this->response = ProductIdResponse::class;
-
-        return $data;
     }
 }

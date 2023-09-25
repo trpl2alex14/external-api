@@ -8,10 +8,7 @@ use ReflectionClass;
 
 class Helper
 {
-    /**
-     * @throws \ReflectionException
-     */
-    public static function getRequestClassName(string $shortName, $gateway): string
+    public static function getRequestClassName(string $shortName, GatewayInterface|string $gateway): string
     {
         $gateway = is_object($gateway) ? (new ReflectionClass($gateway))->getName() : $gateway;
 

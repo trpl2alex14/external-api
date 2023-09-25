@@ -3,8 +3,8 @@
 namespace ExternalApi\Bitrix24;
 
 use ExternalApi\Bitrix24\Entities\Contact;
-use ExternalApi\Bitrix24\Responses\ContactIdResponse;
 use ExternalApi\Bitrix24\Responses\ContactFoundResponse;
+use ExternalApi\Bitrix24\Responses\ContactListResponse;
 use ExternalApi\Bitrix24\Responses\ContactResponse;
 use ExternalApi\Bitrix24\Traits\Filterable;
 use ExternalApi\Bitrix24\Traits\Notified;
@@ -38,6 +38,8 @@ class ContactBuilder extends Builder implements FilterBuilderInterface
         'crm.contact.delete' => 'id',
         'crm.duplicate.findbycomm' => 'phone|email'
     ];
+
+    protected string $response = ContactResponse::class;
 
     /**
      * @throws BuilderException
@@ -108,6 +110,10 @@ class ContactBuilder extends Builder implements FilterBuilderInterface
 
     public function getData(): array
     {
+        if ($this->method === 'crm.contact.list') {
+            $this->response = ContactListResponse::class;
+        }
+
         return match ($this->getMethod()) {
             'crm.duplicate.findbycomm' => $this->makeDataForFindBy(),
             'crm.contact.add' => $this->makeDataForAdd(),
@@ -129,21 +135,15 @@ class ContactBuilder extends Builder implements FilterBuilderInterface
             $data['params']['REGISTER_SONET_EVENT'] = $notify;
         }
 
-        $this->response = ContactIdResponse::class;
-
         return $data;
     }
 
 
     private function makeDataForGet(): array
     {
-        $data = [
+        return [
             'id' => $this->getId()
         ];
-
-        $this->response = ContactResponse::class;
-
-        return $data;
     }
 
 
@@ -156,8 +156,6 @@ class ContactBuilder extends Builder implements FilterBuilderInterface
         if (!is_null($notify = $this->getNotify())) {
             $data['params']['REGISTER_SONET_EVENT'] = $notify;
         }
-
-        $this->response = ContactIdResponse::class;
 
         return $data;
     }

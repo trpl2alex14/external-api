@@ -84,7 +84,7 @@ class Bitrix24ContactTest extends TestCase
 
         $response = $this->gateway->call($builder);
 
-        $this->assertInstanceOf(ContactIdResponse::class, $response);
+        $this->assertInstanceOf(ContactResponse::class, $response);
         $resource = $response->getResource();
         $this->assertGreaterThan(19600, $resource->id);
 
@@ -109,7 +109,7 @@ class Bitrix24ContactTest extends TestCase
             ->setId($id)
             ->call();
 
-        $this->assertInstanceOf(ContactIdResponse::class, $response);
+        $this->assertInstanceOf(ContactResponse::class, $response);
         $this->assertEquals($id, $response->getResource()->id);
     }
 

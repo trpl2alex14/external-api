@@ -51,7 +51,7 @@ class Bitrix24ProductTest extends TestCase
             ->setFields($product->getFields())
             ->call();
 
-        $this->assertInstanceOf(ProductIdResponse::class, $response);
+        $this->assertInstanceOf(ProductResponse::class, $response);
         $resource = $response->getResource();
         $this->assertGreaterThan(200, $resource->id);
 
@@ -93,7 +93,7 @@ class Bitrix24ProductTest extends TestCase
             ->setId($id)
             ->call();
 
-        $this->assertInstanceOf(ProductIdResponse::class, $response);
+        $this->assertInstanceOf(ProductResponse::class, $response);
         $resource = $response->getResource();
         $this->assertEquals($id, $resource->id);
     }

@@ -15,7 +15,11 @@ class Response extends ResponseBase
 
     public function getBody()
     {
-        return parent::getBody()['result'] ?? null;
+        $response = parent::getBody()['result'] ?? null;
+
+        return  is_array($response)
+            ? $response
+            : ['id' => $response];
     }
 
 
