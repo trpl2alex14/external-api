@@ -6,8 +6,10 @@ use ExternalApi\Bitrix24\Entities\Contact;
 use ExternalApi\Bitrix24\Responses\ContactFoundResponse;
 use ExternalApi\Bitrix24\Responses\ContactListResponse;
 use ExternalApi\Bitrix24\Responses\ContactResponse;
+use ExternalApi\Bitrix24\Responses\ContactWithRequisiteResponse;
 use ExternalApi\Bitrix24\Traits\Filterable;
 use ExternalApi\Bitrix24\Traits\Notified;
+use ExternalApi\Bitrix24\Traits\WithRequisite;
 use ExternalApi\Common\Builder;
 use ExternalApi\Contracts\EntityInterface;
 use ExternalApi\Contracts\FilterBuilderInterface;
@@ -19,7 +21,7 @@ use ExternalApi\Exceptions\BuilderException;
 
 class ContactBuilder extends Builder implements FilterBuilderInterface
 {
-    use Filterable, Notified;
+    use Filterable, Notified, WithRequisite;
 
     protected array $methods = [
         'findBy' => 'crm.duplicate.findbycomm',
@@ -108,6 +110,9 @@ class ContactBuilder extends Builder implements FilterBuilderInterface
     }
 
 
+    /**
+     * @throws BuilderException
+     */
     public function getData(): array
     {
         if ($this->method === 'crm.contact.list') {
@@ -146,9 +151,19 @@ class ContactBuilder extends Builder implements FilterBuilderInterface
         ];
     }
 
-
+    /**
+     * @throws BuilderException
+     */
     private function makeDataForAdd(): array
     {
+        if ($this->hasRequisite()) {
+            $builder = $this->makeRequisiteBatchBuilder('contact');
+            $this->method('batch')
+                ->setResponse(ContactWithRequisiteResponse::class);
+
+            return $builder->getData();
+        }
+
         $data = [
             'fields' => $this->getFields(),
             'params' => []

@@ -24,6 +24,12 @@ class Response implements ResponseInterface
     }
 
 
+    public function getRawBody(): ?array
+    {
+        return $this->body;
+    }
+
+
     public function getStatusCode(): int
     {
         return $this->response?->getStatusCode() ?: 500;
@@ -42,8 +48,9 @@ class Response implements ResponseInterface
     }
 
 
-    public function getResource(): Entity
+    public function getResource(): ?Entity
     {
-        return $this->gateway->createEntity($this->entityClass, $this->getBody());
+        $body = $this->getBody();
+        return is_array($body) ? $this->gateway->createEntity($this->entityClass, $body) : null;
     }
 }

@@ -49,6 +49,12 @@ class Entity implements EntityFieldsInterface, EntityInterface
     }
 
 
+    public function getCodeFields(): array
+    {
+        return $this->fieldCodes;
+    }
+
+
     public function setFields(array $fields): self
     {
         foreach ($fields as $key => $value) {

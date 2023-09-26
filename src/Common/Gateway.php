@@ -132,7 +132,7 @@ abstract class Gateway implements GatewayInterface
     }
 
 
-    public function createEntity(string $entity, ...$args): Entity
+    public function createEntity(string $entity, ?array $args = null): Entity
     {
         $class = Helper::getEntityClassName($entity, static::class);
 
@@ -141,14 +141,10 @@ abstract class Gateway implements GatewayInterface
         }
 
         $entityName = Helper::getEntityName($entity);
-        if(isset($this->entitySettings[$entityName])){
-            $args = [
-                ...$args,
-                $this->entitySettings[$entityName]
-            ];
-        }
 
-        return new $class(...$args);
+        $args = is_array($args) ? $args : [];
+
+        return new $class($args, $this->entitySettings[$entityName] ?? null);
     }
 
     /**

@@ -3,7 +3,6 @@
 namespace ExternalApi\Tests\Integrations;
 
 use ExternalApi\Bitrix24\Gateway;
-use ExternalApi\Bitrix24\Responses\ContactIdResponse;
 use ExternalApi\Bitrix24\Responses\ContactResponse;
 use ExternalApi\Common\Response;
 use ExternalApi\Exceptions\BuilderException;
