@@ -122,7 +122,7 @@ abstract class Gateway implements GatewayInterface
 
     public function createRequestBuilder(string $entity): RequestBuilderInterface|FilterBuilderInterface
     {
-        $class = Helper::getRequestClassName($entity, static::class);
+        $class = Helper::getRequestClassName($entity, $this);
 
         if (!class_exists($class)) {
             throw new RuntimeException("Class request '$class' not found");
@@ -134,7 +134,7 @@ abstract class Gateway implements GatewayInterface
 
     public function createEntity(string $entity, ?array $args = null): Entity
     {
-        $class = Helper::getEntityClassName($entity, static::class);
+        $class = Helper::getEntityClassName($entity, $this);
 
         if (!class_exists($class)) {
             throw new RuntimeException("Class entity '$class' not found");
@@ -143,7 +143,7 @@ abstract class Gateway implements GatewayInterface
         $entityName = Helper::getEntityName($entity);
 
         $args = is_array($args) ? $args : [];
-
+        $entityName = str_ends_with($entityName, 'list') ? str_replace('list', '', $entityName) : $entityName;
         return new $class($args, $this->entitySettings[$entityName] ?? null);
     }
 
@@ -211,12 +211,10 @@ abstract class Gateway implements GatewayInterface
     {
         if (method_exists($request, 'getResponseClassName')) {
             $class = $request->getResponseClassName();
-
             $class = class_exists($class) ? $class : null;
         }
 
         $class = $class ?? Response::class;
-
         return new $class($response, $this);
     }
 }

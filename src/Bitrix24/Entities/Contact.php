@@ -3,6 +3,7 @@
 namespace ExternalApi\Bitrix24\Entities;
 
 use ExternalApi\Common\Entity;
+use ExternalApi\Common\Helper;
 use ExternalApi\Contracts\SearchContactInterface;
 
 
@@ -35,7 +36,13 @@ class Contact extends Entity implements SearchContactInterface
     {
         $value = is_string($value) ? [$value] : $value;
 
-        return is_array($value) ? array_map(fn($item) => is_array($item) ? $item : ['VALUE' => $item], $value) : $value;
+        return is_array($value)
+            ? array_map(
+                fn($item) => is_array($item)
+                    ? $item
+                    : ['VALUE' => $name === 'phone' ? Helper::formatPhone($item,7) : $item], $value
+            )
+            : $value;
     }
 
 

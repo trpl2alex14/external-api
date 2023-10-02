@@ -14,7 +14,7 @@ class EntityList extends Entity implements EntityListInterface
 
     public function __construct(array $fields = [], ?array $settingFields = null)
     {
-        $items = array_map(fn($item) => new $this->entityClass($item), $fields);
+        $items = array_map(fn($item) => new $this->entityClass($item, $settingFields), $fields);
 
         parent::__construct(['items' => $items], $settingFields);
     }

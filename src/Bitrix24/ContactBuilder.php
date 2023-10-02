@@ -11,6 +11,7 @@ use ExternalApi\Bitrix24\Traits\Filterable;
 use ExternalApi\Bitrix24\Traits\Notified;
 use ExternalApi\Bitrix24\Traits\WithRequisite;
 use ExternalApi\Common\Builder;
+use ExternalApi\Common\Helper;
 use ExternalApi\Contracts\EntityInterface;
 use ExternalApi\Contracts\FilterBuilderInterface;
 use ExternalApi\Contracts\FilterInterface;
@@ -204,6 +205,6 @@ class ContactBuilder extends Builder implements FilterBuilderInterface
 
     private function transformPhoneValue(string $phone): string
     {
-        return substr(preg_replace("/[^0-9]/", '', $phone), 1);
+        return Helper::formatPhone($phone);
     }
 }

@@ -10,6 +10,10 @@ class Helper
 {
     public static function getRequestClassName(string $shortName, GatewayInterface|string $gateway): string
     {
+        if($gateway instanceof GatewayInterface){
+            return 'ExternalApi\\' . ucfirst($gateway->getName()) . '\\' . ucfirst($shortName) . 'Builder';
+        }
+
         $gateway = is_object($gateway) ? (new ReflectionClass($gateway))->getName() : $gateway;
 
         if (is_subclass_of($shortName, Builder::class, true)) {
@@ -54,10 +58,18 @@ class Helper
     }
 
 
-    public static function getEntityClassName(string $shortName, string $gateway): string
+    public static function getEntityClassName(string $shortName, GatewayInterface|string $gateway): string
     {
+        if (str_starts_with($shortName, 'ExternalApi\\')) {
+            return $shortName;
+        }
+
         if (is_subclass_of($shortName, Entity::class, true)) {
             return $shortName;
+        }
+
+        if($gateway instanceof GatewayInterface){
+            return 'ExternalApi\\' . ucfirst($gateway->getName()) . '\\Entities\\' . ucfirst($shortName);
         }
 
         $namespace = substr($gateway, 0, strrpos($gateway, '\\'));
@@ -72,5 +84,11 @@ class Helper
         $entity = array_pop($words);
 
         return strtolower($entity);
+    }
+
+
+    public static function formatPhone(string $phone, string $code = ''): string
+    {
+        return $code.substr(preg_replace("/[^0-9]/", '', $phone), 1);
     }
 }
