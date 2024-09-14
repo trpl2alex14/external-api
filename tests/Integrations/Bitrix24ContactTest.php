@@ -23,6 +23,12 @@ class Bitrix24ContactTest extends TestCase
         'last_name' => 'Тестов'
     ];
 
+    private array $demoExpectedFields = [
+        'phone' => ['79001001001', '79001001002'],
+        'email' => 'test1@test.ru',
+        'first_name' => 'Иван',
+        'last_name' => 'Тестов'
+    ];
 
     protected function setUp(): void
     {
@@ -128,7 +134,7 @@ class Bitrix24ContactTest extends TestCase
         $this->assertEquals($id, $resource->id);
         $this->assertEquals($this->demoFields['first_name'], $resource->first_name);
         $this->assertEquals($this->demoFields['last_name'] . 'в', $resource->last_name);
-        $this->assertEquals($this->demoFields['phone'], array_values($resource->phone));
+        $this->assertEquals($this->demoExpectedFields['phone'], array_values($resource->phone));
         $this->assertEquals([$this->demoFields['email']], array_values($resource->email));
         $this->assertEquals('test update', $resource->comments);
     }

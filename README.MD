@@ -57,3 +57,9 @@ $response = $gateway->call($requestBuilder->build());
 
 $entity = $response->getResource();
 ```
+
+## Run Tests
+
+```bash
+phpunit --testdox  [--testsuite integrations]
+```

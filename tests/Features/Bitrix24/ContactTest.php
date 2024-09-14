@@ -19,10 +19,10 @@ class ContactTest extends TestCase
             'last_name' => 'тест'
         ]);
 
-        $this->assertEquals(['+7 900 123-12-12', '+7 900 123-12-10'], $contact->getPhone());
+        $this->assertEquals(['79001231212', '79001231210'], $contact->getPhone());
         $this->assertEquals(['test@test.ru'], $contact->getEmail());
         $this->assertEquals([['VALUE' => 'test@test.ru']], $contact->getRaw()['EMAIL']);
-        $this->assertEquals(['VALUE' => '+7 900 123-12-12'], $contact->getRaw()['PHONE'][0]);
+        $this->assertEquals(['VALUE' => '79001231212'], $contact->getRaw()['PHONE'][0]);
         $this->assertEquals('алексей', $contact->getRaw()['NAME']);
         $this->assertEquals('тест', $contact->getRaw()['LAST_NAME']);
         $this->assertEquals('алексей', $contact->getFirstName());

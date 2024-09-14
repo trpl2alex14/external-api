@@ -43,9 +43,9 @@ class Bitrix24FindContactsTest extends TestCase
 
         $contact = [
             'phone' => '+7 900 123-12-12',
-            'email' => 'test@test.ru',
+            'email' => 'testapi@test.ru',
             'first_name' => 'алексей',
-            'last_name' => 'тест'
+            'last_name' => 'тестапи'
         ];
 
         $findEmailBuilder = (new ContactBuilder())
@@ -98,9 +98,9 @@ class Bitrix24FindContactsTest extends TestCase
             ->createEntity('contact', [
                 'id' => 19604,
                 'phone' => ['+7 900 123-12-12', '+7 900 123-12-10'],
-                'email' => 'test@test.ru',
+                'email' => 'testapi@test.ru',
                 'first_name' => 'алексей',
-                'last_name' => 'тест'
+                'last_name' => 'тестапи'
             ]);
 
         $response = $this->gateway
