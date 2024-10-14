@@ -45,7 +45,7 @@ class Gateway extends BaseGateway
 
         $sleep = (1 / self::MAX_CALL_PER_SECOND - ($time_end - $time_start));
         if ($sleep > 0 && $this->throttle) {
-            usleep($sleep * 1000000);
+            usleep(round($sleep * 1000000));
         }
 
         return $response;
